@@ -5,10 +5,10 @@ import javax.swing.SwingUtilities;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
-public class DVDrental {
+public class DVDRental {
 
 	
-	private static Logger log = Logger.getLogger(DVDrental.class);
+	private static Logger log = Logger.getLogger(DVDRental.class);
 	
 	public static void main(String[] args) {
 
@@ -21,7 +21,7 @@ public class DVDrental {
 		// creating and showing this application's GUI.
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				DVDrental dvdrental = new DVDrental();
+				DVDRental dvdrental = new DVDRental();
 				dvdrental.createAndShowGUI();
 			}
 		});

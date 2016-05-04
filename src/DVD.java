@@ -1,4 +1,4 @@
-// próba dodania pierwsza :)
+// próba dodania Trzecia :)
 public class DVD {
 
 }

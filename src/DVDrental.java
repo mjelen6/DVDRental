@@ -5,13 +5,13 @@ import javax.swing.SwingUtilities;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
-public class DVDrent {
+public class DVDrental {
 
 	
-	private static Logger log = Logger.getLogger(DVDrent.class);
+	private static Logger log = Logger.getLogger(DVDrental.class);
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+
 
 		// Prepare a logger
 		BasicConfigurator.configure();
@@ -21,20 +21,21 @@ public class DVDrent {
 		// creating and showing this application's GUI.
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				DVDrent dvdrent = new DVDrent();
-				dvdrent.createAndShowGUI();
+				DVDrental dvdrental = new DVDrental();
+				dvdrental.createAndShowGUI();
 			}
 		});
 		
-
 		log.info("Main function closed");
+		
 	}
 
 	private void createAndShowGUI() {
 		System.out.println("Created GUI on EDT? " + SwingUtilities.isEventDispatchThread());
-		JFrame f = new JFrame("Swing Paint Demo");
+		JFrame f = new JFrame("DVDRental");
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.add(new JPanel());
+		
 		f.pack();
 		f.setVisible(true);
 	}

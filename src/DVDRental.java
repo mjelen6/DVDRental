@@ -31,7 +31,7 @@ public class DVDRental {
 	}
 
 	private void createAndShowGUI() {
-		System.out.println("Created GUI on EDT? " + SwingUtilities.isEventDispatchThread());
+		
 		JFrame f = new JFrame("DVDRental");
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.add(new JPanel());

@@ -17,6 +17,5 @@
 			<attribute name="javadoc_location" value="jar:file:/D:/java_workspace/DVDrent/lib/doc/sqlite-jdbc-3.7.2-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="miglayout15-swing.jar" sourcepath="miglayout-src.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

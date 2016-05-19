@@ -17,32 +17,54 @@ public class Loan {
 	
 	public Loan(){}
 	public Loan(int loanId, int dvdId,String userName, String userSurname,String lentDate, String returnDate){
-		this.loanId = loanId;
-		this.dvdId = dvdId; 
-		this.userName = userName;
-		this.userSurname = userSurname;
-		this.lentDate = lentDate;
-		this.returnDate = returnDate;
+		this.setLoanId(loanId);
+		this.setDvdId(dvdId); 
+		this.setUserName(userName);
+		this.setUserSurname(userSurname);
+		this.setLentDate(lentDate);
+		this.setReturnDate(returnDate);
 		
+	}
+	public int getLoanId() {
+		return loanId;
+	}
+	public void setLoanId(int loanId) {
+		this.loanId = loanId;
+	}
+	public int getDvdId() {
+		return dvdId;
+	}
+	public void setDvdId(int dvdId) {
+		this.dvdId = dvdId;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public String getUserSurname() {
+		return userSurname;
+	}
+	public void setUserSurname(String userSurname) {
+		this.userSurname = userSurname;
+	}
+	public String getLentDate() {
+		return lentDate;
+	}
+	public void setLentDate(String lentDate) {
+		this.lentDate = lentDate;
+	}
+	public String getReturnDate() {
+		return returnDate;
+	}
+	public void setReturnDate(String returnDate) {
+		this.returnDate = returnDate;
 	}
 	
 
 	
 
 	
-	/*public static void main(String[] args) {
-		
-		BasicConfigurator.configure();
-		log.debug("Application start");
-		
-		GregorianCalendar date = new GregorianCalendar();	
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm");
-		
-		System.out.println("" + dateFormat.format(date.getTime()));
-		
-		
-		log.debug("App stop");
-		
-	}*/
 
 }

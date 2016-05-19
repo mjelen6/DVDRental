@@ -20,10 +20,9 @@ import org.apache.log4j.Logger;
  *
  */
 public class SqlHandler {
-//	private static Logger log1 = Logger.getLogger(SqlHandler.class);
 	private Connection conn = null;
 	private Statement state; 
-//	private static Logger log = Logger.getLogger(SqlHandler.class);
+	private static Logger log = Logger.getLogger(SqlHandler.class);
 
 	/**
 	 * Create one handler to database.
@@ -33,12 +32,12 @@ public class SqlHandler {
 
 		try {
 			Class.forName("org.sqlite.JDBC");
-//			log1.info("Driver was found.");
+			log.info("Driver was found.");
 
 		} catch (ClassNotFoundException e) {
-//			log1.error(e.getMessage());
-//			log1.error(e.getStackTrace());
-//			log1.error("Missed driver. You should download driver first:  http://www.xerial.org/maven/repository/artifact/org/xerial/sqlite-jdbc/3.7.2");
+			log.error(e.getMessage());
+			log.error(e.getStackTrace());
+			log.error("Missed driver. You should download driver first:  http://www.xerial.org/maven/repository/artifact/org/xerial/sqlite-jdbc/3.7.2");
 			
 		}
 //		log1.debug("SqlHandler created.");
@@ -53,17 +52,17 @@ public class SqlHandler {
 	public void connect() {
 		try {
 			conn = DriverManager.getConnection("jdbc:sqlite:baza.db");
-//			log1.info("Database connection was established.");
+			log.info("Database connection was established.");
 		} catch (SQLException e) {
-//			log1.error(e.getMessage());
-//			log1.error(e.getStackTrace());
+			log.error(e.getMessage());
+			log.error(e.getStackTrace());
 		}
 		try {
 			state = conn.createStatement();
-//			log1.debug("Statement created.");
+			log.debug("Statement created.");
 		} catch (SQLException e) {
-//			log1.error(e.getMessage());
-//			log1.error(e.getStackTrace());
+			log.error(e.getMessage());
+			log.error(e.getStackTrace());
 		}
 	}
 
@@ -73,10 +72,10 @@ public class SqlHandler {
 	public void close() {
 		try {
 			conn.close();
-//			log1.info("Connection was closed.");
+			log.info("Connection was closed.");
 		} catch (SQLException e) {
-//			log1.error(e.getMessage());
-//			log1.error(e.getStackTrace());
+			log.error(e.getMessage());
+			log.error(e.getStackTrace());
 		}
 	}
 
@@ -115,8 +114,21 @@ public class SqlHandler {
 	        }
 		return true;
 	}
+	public boolean insertCategories(String name){
+		 try {
+	            PreparedStatement prepStmt = conn.prepareStatement(
+	                    "insert into categories values (NULL, ?);");
+	            prepStmt.setString(1, name);
+	            prepStmt.execute();
+	        } catch (SQLException e) {
+	            System.err.println("Blad przy wstawianiu czytelnika");
+	            e.printStackTrace();
+	            return false;
+	        }
+		return true;
+	}
 	
-	public List<Movie> selectMovies(){
+	public List<Movie> getMovies(){
 		List<Movie> movies = new LinkedList<Movie>();
 		try {
 			ResultSet result = state.executeQuery("SELECT * FROM movies_list");
@@ -135,6 +147,30 @@ public class SqlHandler {
 			return null;
 		}
 		return movies;
+	}
+	
+	public Movie findMovieByID(int mid){
+		Movie movie;
+		try {
+			ResultSet result = state.executeQuery("SELECT * FROM movies_list");
+			int tempMid;
+			int tempCid; 
+			String tempName;
+			String tempDirector; 
+			while(result.next()){
+				tempMid = result.getInt("mid");
+				if(tempMid == mid){
+					tempCid = result.getInt("cid");
+					tempName = result.getString("name");
+					tempDirector = result.getString("director");
+					movie = new Movie(tempMid, tempCid, tempName, tempDirector);
+					return movie;
+				}
+			}
+		} catch (Exception e) {
+			return null;
+		}
+		return movie = new Movie();
 	}
 	
 	

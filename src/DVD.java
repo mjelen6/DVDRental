@@ -1,4 +1,8 @@
-// próba dodania czwarta :)
-public class DVD {
 
+
+public class DVD {
+	int dvdId; 
+	
+	
+	
 }

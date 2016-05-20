@@ -5,14 +5,20 @@ import java.awt.Font;
 import java.awt.Label;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-
+import javax.swing.JScrollPane;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+import javax.swing.JTextField;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JButton;
+import java.awt.Component;
+import java.awt.Toolkit;
+import javax.swing.Box;
 
 public class MainFrame {
 
@@ -22,12 +28,21 @@ public class MainFrame {
 	private JPanel mainPanel;
 	private JPanel sideBar;
 	private JPanel tablePanel;
-	private JTabbedPane movie;
 	private JLabel title;
+	private JTable dvdTable;
+	private JScrollPane scrollPane;
+	private JTextField textField;
+	private JButton searchButton;
+	private Box searchBox;
+	private Component verticalGlue;
+	private Component verticalGlue_1;
+	private Component verticalGlue_3;
+	private Component verticalGlue_4;
 	
 	
 	/**
-	 * Launch the application.
+	 * 
+	 * @param args
 	 */
 	public static void main(String[] args) {
 		
@@ -54,6 +69,7 @@ public class MainFrame {
 		
 		// Prepare main frame
 		frame = new JFrame();
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage("img/dvd-icon.png"));
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -64,18 +80,74 @@ public class MainFrame {
 		
 		// Create sidebar
 		sideBar = new JPanel();
-		sideBar.setLayout(new BoxLayout(sideBar, BoxLayout.Y_AXIS));
 		sideBar.setBorder(BorderFactory.createTitledBorder("Menu boczne"));
-		sideBar.add(new Label("lista"), BorderLayout.EAST);
+		sideBar.setLayout(new BorderLayout(0, 0));
+		
+		searchBox = Box.createVerticalBox();
+		searchBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+		sideBar.add(searchBox);
+		Label label = new Label("Szukaj");
+		searchBox.add(label);
+		label.setFont(new Font("Arial", Font.BOLD, 16));
+		
+		textField = new JTextField();
+		searchBox.add(textField);
+		textField.setColumns(20);
+		textField.setMaximumSize( textField.getPreferredSize() );
+		textField.setHorizontalAlignment(SwingConstants.LEFT);
+		
+
+		
+		searchButton = new JButton("Szukaj");
+		searchButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		searchBox.add(searchButton);
+		
+		verticalGlue_4 = Box.createVerticalGlue();
+		searchBox.add(verticalGlue_4);
+		
+		verticalGlue_3 = Box.createVerticalGlue();
+		searchBox.add(verticalGlue_3);
+		
+		verticalGlue_1 = Box.createVerticalGlue();
+		searchBox.add(verticalGlue_1);
+		
+		verticalGlue = Box.createVerticalGlue();
+		searchBox.add(verticalGlue);
 		mainPanel.add(sideBar, BorderLayout.WEST);
 		
 		// Create tablepanel
 		tablePanel = new JPanel(new BorderLayout());
-		mainPanel.add(tablePanel,BorderLayout.EAST);
+		mainPanel.add(tablePanel,BorderLayout.CENTER);
 		
 		//tablePanel.
 		title = new JLabel("Lista dostêpnych DVD");
+		title.setHorizontalAlignment(SwingConstants.CENTER);
+		title.setFont(new Font("Arial", Font.BOLD, 20));
 		tablePanel.add(title,BorderLayout.NORTH);
+		
+
+		
+		
+		
+		dvdTable = new JTable(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"Tytu\u0142", "Re\u017Cyser", "Kategoria", "Ilo\u015B\u0107"
+			}
+		) {
+			Class[] columnTypes = new Class[] {
+				String.class, String.class, String.class, Integer.class
+			};
+			public Class getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
+			}
+		});
+
+		
+		scrollPane = new JScrollPane(dvdTable);
+		tablePanel.add(scrollPane, BorderLayout.CENTER);
+		
 		
 		
 		// content panes must be opaque
@@ -83,6 +155,7 @@ public class MainFrame {
 		frame.setContentPane(mainPanel);
 		frame.setMinimumSize(frame.getMinimumSize());
 
+		
 		// Display the window.
 		frame.pack();
 		frame.setVisible(true);

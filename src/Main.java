@@ -18,11 +18,10 @@ public class Main {
 		SqlHandler s = new SqlHandler();
 		s.insertMovie(2, "ktos", "niznany");
 		
-		List<Movie> movies = new LinkedList<Movie>();
-		movies = s.getAllMovies();
+		MoviesList movies = s.getAllMovies();
 		
 		System.out.println("lista filmow");
-		for(Movie c: movies){
+		for(Movie c : movies){
 			System.out.println(c);
 		}
 		

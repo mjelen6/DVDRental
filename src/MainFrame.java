@@ -18,9 +18,12 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
 import java.awt.Component;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.Box;
 
-public class MainFrame {
+public class MainFrame extends DVDRental{
 
 	private static Logger log = Logger.getLogger(MainFrame.class); // class logger
 	
@@ -38,6 +41,12 @@ public class MainFrame {
 	private Component verticalGlue_1;
 	private Component verticalGlue_3;
 	private Component verticalGlue_4;
+
+	
+	
+	public MainFrame(DVDRentInterface dvdRentInterface) {
+		super(dvdRentInterface);
+	}
 	
 	
 	/**
@@ -52,7 +61,8 @@ public class MainFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					MainFrame mainFrame = new MainFrame();
+					DVDRentInterface dvdRentInterface = new SqlHandler();
+					MainFrame mainFrame = new MainFrame(dvdRentInterface);
 					mainFrame.createAndShowGUI();
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -65,6 +75,7 @@ public class MainFrame {
 
 
 	/** Method that launches main frame */
+	@SuppressWarnings("serial")
 	private void createAndShowGUI() { 
 		
 		// Prepare main frame
@@ -87,8 +98,9 @@ public class MainFrame {
 		searchBox.setAlignmentX(Component.CENTER_ALIGNMENT);
 		sideBar.add(searchBox);
 		Label label = new Label("Szukaj");
-		searchBox.add(label);
 		label.setFont(new Font("Arial", Font.BOLD, 16));
+		searchBox.add(label);
+		
 		
 		textField = new JTextField();
 		searchBox.add(textField);
@@ -101,6 +113,20 @@ public class MainFrame {
 		searchButton = new JButton("Szukaj");
 		searchButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		searchBox.add(searchButton);
+		searchButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				MoviesList movies = getAllMovies();
+				
+				System.out.println("lista filmow");
+				for(Movie c : movies){
+					System.out.println(c);
+				}
+			}
+		});
+		
 		
 		verticalGlue_4 = Box.createVerticalGlue();
 		searchBox.add(verticalGlue_4);

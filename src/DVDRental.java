@@ -5,40 +5,23 @@ import javax.swing.SwingUtilities;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
-public class DVDRental {
+public abstract class DVDRental {
 
 	
 	private static Logger log = Logger.getLogger(DVDRental.class);
 	
-	public static void main(String[] args) {
-
-
-		// Prepare a logger
-		BasicConfigurator.configure();
-		log.debug("Application Start");
-
-		// Schedule a job for the event-dispatching thread:
-		// creating and showing this application's GUI.
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				DVDRental dvdrental = new DVDRental();
-				dvdrental.createAndShowGUI();
-			}
-		});
-		
-		log.info("Main function closed");
-		
+	private DVDRentInterface dvdRentInterface;
+	
+	public DVDRental(DVDRentInterface dvdRentInterface){
+		this.dvdRentInterface = dvdRentInterface;
+	}
+	
+	
+	public MoviesList getAllMovies() {
+		return dvdRentInterface.getAllMovies();
 	}
 
-	private void createAndShowGUI() {
-		
-		JFrame f = new JFrame("DVDRental");
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.add(new JPanel());
-		
-		f.pack();
-		f.setVisible(true);
-	}
 	
 	
 }
+

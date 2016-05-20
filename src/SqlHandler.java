@@ -20,7 +20,7 @@ import org.apache.log4j.Logger;
  * @author Maciek
  *
  */
-public class SqlHandler {
+public class SqlHandler implements DVDRentInterface{
 	private Connection conn = null;
 	private Statement state; 
 	private static Logger log = Logger.getLogger(SqlHandler.class);
@@ -91,6 +91,9 @@ public class SqlHandler {
 			state.execute(createDvdList);
 			state.execute(createLoanList);
 		} catch (SQLException e) {
+			log.error(e.getMessage());
+			log.error(e.getStackTrace());
+			
 			 System.err.println("Blad przy tworzeniu tabeli");
 	            e.printStackTrace();
 	            return false;
@@ -150,10 +153,9 @@ public class SqlHandler {
 	
 	
 	
-	
-	
-	public List<Movie> getAllMovies(){
-		List<Movie> movies = new LinkedList<Movie>();
+	@Override
+	public MoviesList getAllMovies(){
+		MoviesList movies = new MoviesList();
 		try {
 			ResultSet result = state.executeQuery("SELECT * FROM movies_list");
 			int mid;
@@ -168,6 +170,8 @@ public class SqlHandler {
 				movies.add(new Movie(mid, cid, name, director));
 			}
 		} catch (Exception e) {
+			log.error(e.getMessage());
+			log.error(e.getStackTrace());
 			return null;
 		}
 		return movies;
@@ -285,6 +289,8 @@ public class SqlHandler {
 		}
 		return loan = new Loan();
 	}
+
+
 	
 	
 	

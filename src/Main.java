@@ -16,11 +16,10 @@ public class Main {
 		Movie m = new Movie();
 		
 		SqlHandler s = new SqlHandler();
-		s.insertMovie(2, "nikt", "niznany");
-		System.out.println("Przeszlo");
+		s.insertMovie(2, "ktos", "niznany");
 		
 		List<Movie> movies = new LinkedList<Movie>();
-		movies = s.getMovies();
+		movies = s.getAllMovies();
 		
 		System.out.println("lista filmow");
 		for(Movie c: movies){
@@ -29,7 +28,7 @@ public class Main {
 		
 		
 		System.out.println("znaleziony film");
-		m = s.findMovieByID(3);
+		m = s.findMovieByID(14);
 		System.out.println(m);
 		
 		s.close();

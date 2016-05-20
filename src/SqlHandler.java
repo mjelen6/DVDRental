@@ -1,6 +1,7 @@
 
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -83,7 +84,7 @@ public class SqlHandler {
 		String createCategories = "CREATE TABLE IF NOT EXISTS categories (cid INTEGER PRIMARY KEY AUTOINCREMENT, name varchar(255))"; 
 		String createMoviesList = "CREATE TABLE IF NOT EXISTS movies_list (mid INTEGER PRIMARY KEY AUTOINCREMENT, cid integer, director varchar(255), name varchar(255))"; 
 		String createDvdList = "CREATE TABLE IF NOT EXISTS dvd_list (dvd_id INTEGER PRIMARY KEY AUTOINCREMENT, mid integer, lent integer )"; 
-		String createLoanList = "CREATE TABLE IF NOT EXISTS loan_list (loan_id INTEGER PRIMARY KEY AUTOINCREMENT, dvd_id integer, user_name varchar(255), user_surname varchar(255), lent_date varchar(255), return_date varchar(255) )"; 
+		String createLoanList = "CREATE TABLE IF NOT EXISTS loan_list (loan_id INTEGER PRIMARY KEY AUTOINCREMENT, dvd_id integer, user_name varchar(255), user_surname varchar(255), lent_date date, return_date date)"; 
 		try {
 			state.execute(createCategories);
 			state.execute(createMoviesList);
@@ -96,6 +97,8 @@ public class SqlHandler {
 		}
 		return true;
 	}
+	
+	
 	
 	
 	
@@ -127,8 +130,29 @@ public class SqlHandler {
 	        }
 		return true;
 	}
+	public boolean insertLoan(int dvdId, String userName, String userSurname, Date lentDate, Date returnDate){
+		 try {
+	            PreparedStatement prepStmt = conn.prepareStatement(
+	                    "insert into loan_list values (NULL, ?, ? , ? );");
+	            prepStmt.setInt(1, dvdId);
+	            prepStmt.setString(2, userName);
+	            prepStmt.setString(3, userSurname);
+	            prepStmt.setDate(4, lentDate);
+	            prepStmt.setDate(5, returnDate);
+	            prepStmt.execute();
+	        } catch (SQLException e) {
+	            System.err.println("Blad przy wstawianiu wypozyczenia");
+	            e.printStackTrace();
+	            return false;
+	        }
+		return true;
+	}
 	
-	public List<Movie> getMovies(){
+	
+	
+	
+	
+	public List<Movie> getAllMovies(){
 		List<Movie> movies = new LinkedList<Movie>();
 		try {
 			ResultSet result = state.executeQuery("SELECT * FROM movies_list");
@@ -148,31 +172,119 @@ public class SqlHandler {
 		}
 		return movies;
 	}
+	public List<Categories> getAllCategories(){
+		List<Categories> categories = new LinkedList<Categories>();
+		try {
+			ResultSet result = state.executeQuery("SELECT * FROM categories");
+			int cid; 
+			String name;
+			while(result.next()){
+				cid = result.getInt("cid");
+				name = result.getString("name");
+				categories.add(new Categories(cid, name));
+			}
+		} catch (Exception e) {
+			return null;
+		}
+		return categories;
+	}
+	public List<Loan> getAllLoan(){
+		List<Loan> loans = new LinkedList<Loan>();
+		try {
+			ResultSet result = state.executeQuery("SELECT * FROM loan_list");
+			int loanId;
+			int dvdId;
+			String userName;
+			String userSurname;
+			Date lentDate;
+			Date returnDate;
+			while(result.next()){
+				loanId = result.getInt("loan_id");
+				dvdId = result.getInt("dvd_id");
+				userName = result.getString("user_name");
+				userSurname = result.getString("user_surname");
+				lentDate = result.getDate("lent_date");
+				returnDate = result.getDate("result_date");
+				loans.add(new Loan(loanId, dvdId, userName, userSurname, lentDate, returnDate));
+			}
+		} catch (Exception e) {
+			return null;
+		}
+		return loans;
+	}
+	
+	
+	
+	
+	
+	
 	
 	public Movie findMovieByID(int mid){
 		Movie movie;
 		try {
-			ResultSet result = state.executeQuery("SELECT * FROM movies_list");
+			ResultSet result = state.executeQuery("SELECT * FROM movies_list where mid = " + mid );
 			int tempMid;
 			int tempCid; 
 			String tempName;
 			String tempDirector; 
 			while(result.next()){
 				tempMid = result.getInt("mid");
-				if(tempMid == mid){
-					tempCid = result.getInt("cid");
-					tempName = result.getString("name");
-					tempDirector = result.getString("director");
-					movie = new Movie(tempMid, tempCid, tempName, tempDirector);
-					return movie;
-				}
+				tempCid = result.getInt("cid");
+				tempName = result.getString("name");
+				tempDirector = result.getString("director");
+				movie = new Movie(tempMid, tempCid, tempName, tempDirector);
+				return movie;
 			}
 		} catch (Exception e) {
 			return null;
 		}
 		return movie = new Movie();
 	}
+	public Categories findCategorieByID(int cid){
+		Categories categories;
+		try {
+			ResultSet result = state.executeQuery("SELECT * FROM categories where mid = " + cid);
+			int tempCid;
+			String tempName;
+			while(result.next()){
+				tempCid = result.getInt("cid");
+				tempName = result.getString("name");
+				categories = new Categories(tempCid, tempName);
+				return categories;
+			}
+		} catch (Exception e) {
+			return null;
+		}
+		return categories = new Categories();
+	}
 	
+	
+	
+	public Loan findLoanByID(int loanId){
+		Loan loan;
+		try {
+			ResultSet result = state.executeQuery("SELECT * FROM loan_list where mid = " + loanId );
+			int tempLoanId;
+			int tempDvdId;
+			String tempUserName;
+			String tempUserSurname;
+			Date tempLentDate;
+			Date tempReturnDate;
+			while(result.next()){
+				tempLoanId = result.getInt("loan_id");
+				tempDvdId = result.getInt("dvd_id");
+				tempUserName = result.getString("user_name");
+				tempUserSurname = result.getString("user_surname");
+				tempLentDate = result.getDate("lent_date");
+				tempReturnDate = result.getDate("return_date");
+				loan = new Loan(tempLoanId, tempDvdId, tempUserName, tempUserSurname, tempLentDate, tempReturnDate);
+				return loan;
+			}
+		} catch (Exception e) {
+			return null;
+		}
+		return loan = new Loan();
+	}
 	
 	
 	

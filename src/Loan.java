@@ -1,3 +1,4 @@
+import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
@@ -12,11 +13,11 @@ public class Loan {
 	private int dvdId;
 	private String userName;
 	private String userSurname;
-	private String lentDate; 		// do zmiant na Date 
-	private String returnDate; 
+	private Date lentDate; 		// do zmiant na Date 
+	private Date returnDate; 
 	
 	public Loan(){}
-	public Loan(int loanId, int dvdId,String userName, String userSurname,String lentDate, String returnDate){
+	public Loan(int loanId, int dvdId,String userName, String userSurname,Date lentDate, Date returnDate){
 		this.setLoanId(loanId);
 		this.setDvdId(dvdId); 
 		this.setUserName(userName);
@@ -49,22 +50,16 @@ public class Loan {
 	public void setUserSurname(String userSurname) {
 		this.userSurname = userSurname;
 	}
-	public String getLentDate() {
+	public Date getLentDate() {
 		return lentDate;
 	}
-	public void setLentDate(String lentDate) {
+	public void setLentDate(Date lentDate) {
 		this.lentDate = lentDate;
 	}
-	public String getReturnDate() {
+	public Date getReturnDate() {
 		return returnDate;
 	}
-	public void setReturnDate(String returnDate) {
+	public void setReturnDate(Date returnDate) {
 		this.returnDate = returnDate;
 	}
-	
-
-	
-
-	
-
 }

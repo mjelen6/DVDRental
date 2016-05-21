@@ -245,9 +245,9 @@ public class SqlHandler implements DVDRentInterface{
 		return null;
 	}
 	public MoviesList findMovieByName(String name){
-		MoviesList movie = null;
+		MoviesList moviesList = new MoviesList();
 		try {
-			ResultSet result = state.executeQuery("SELECT * FROM movies_list where name = " + name );
+			ResultSet result = state.executeQuery("SELECT * FROM movies_list where name=\"" + name +"\"");
 			int tempMid;
 			int tempCid; 
 			String tempName;
@@ -257,12 +257,12 @@ public class SqlHandler implements DVDRentInterface{
 				tempCid = result.getInt("cid");
 				tempName = result.getString("name");
 				tempDirector = result.getString("director");
-				movie.add(new Movie(tempMid, tempCid, tempName, tempDirector));
+				moviesList.add(new Movie(tempMid, tempCid, tempName, tempDirector));
 			}
 		} catch (Exception e) {
-			return null;
+			e.printStackTrace();
 		}
-		return movie;
+		return moviesList;
 	}
 	public Category findCategoryByID(int cid){
 		Category category;

@@ -20,6 +20,7 @@ import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 import javax.swing.Box;
 
@@ -43,9 +44,38 @@ public class MainFrame extends DVDRental{
 	private Component verticalGlue_4;
 
 	
+	private MoviesList movies;
+	
+	
 	
 	public MainFrame(DVDRentInterface dvdRentInterface) {
 		super(dvdRentInterface);
+	}
+	
+	
+	
+	private void searchMovies() {
+		String text = textField.getText();
+
+		log.debug("textField: " + text);
+		
+		
+		if (!text.isEmpty()) {
+			movies = findMovieByName(textField.getText());
+
+			DefaultTableModel model = (DefaultTableModel) dvdTable.getModel();
+			model.getDataVector().removeAllElements();
+			model.fireTableDataChanged();
+
+			if (!movies.isEmpty()) {
+				// System.out.println("lista filmow");
+				for (Movie movie : movies) {
+					log.debug("Movie \"" + movie + "\" added");
+					model.addRow(new Object[] { movie.getName(), movie.getDirector(), movie.getCid(), 153 });
+				}
+			}
+		}
+
 	}
 	
 	
@@ -107,6 +137,15 @@ public class MainFrame extends DVDRental{
 		textField.setColumns(20);
 		textField.setMaximumSize( textField.getPreferredSize() );
 		textField.setHorizontalAlignment(SwingConstants.LEFT);
+		textField.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				log.debug("Enter on textField");
+				searchMovies();
+			}
+		});
 		
 
 		
@@ -118,15 +157,10 @@ public class MainFrame extends DVDRental{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
-				MoviesList movies = getAllMovies();
-				DefaultTableModel model = (DefaultTableModel) dvdTable.getModel();
-				model.getDataVector().removeAllElements();
-				model.fireTableDataChanged();
+				log.debug("Search button pressed");
+				searchMovies();
 				
-				System.out.println("lista filmow");
-				for(Movie movie : movies){
-					model.addRow(new Object[]{movie.getName(), movie.getDirector(), movie.getCid(), 3});
-				}
+
 			}
 		});
 		
@@ -179,6 +213,19 @@ public class MainFrame extends DVDRental{
 			}
 		});
 
+		
+		
+		movies = getAllMovies();
+		DefaultTableModel model = (DefaultTableModel) dvdTable.getModel();
+		model.getDataVector().removeAllElements();
+		model.fireTableDataChanged();
+		
+		System.out.println("lista filmow");
+		for(Movie movie : movies){
+			model.addRow(new Object[]{movie.getName(), movie.getDirector(), movie.getCid(), 3});
+		}
+		
+		
 		
 		scrollPane = new JScrollPane(dvdTable);
 		tablePanel.add(scrollPane, BorderLayout.CENTER);

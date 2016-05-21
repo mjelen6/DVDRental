@@ -21,6 +21,10 @@ public abstract class DVDRental {
 		return dvdRentInterface.getAllMovies();
 	}
 
+	public MoviesList findMovieByName(String name){
+		return dvdRentInterface.findMovieByName(name);
+	}
+	
 	
 	
 }

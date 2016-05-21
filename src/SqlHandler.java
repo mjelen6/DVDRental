@@ -266,20 +266,31 @@ public class SqlHandler implements DVDRentInterface{
 		return moviesList;
 	}
 	public Category findCategoryByID(int cid){
+		
+		log.debug("Finding category by ID");	
+		
 		Category category;
 		try {
+			
+			log.debug("SQL Query: " + "SELECT * FROM categories where cid = " + cid);
 			ResultSet result = state.executeQuery("SELECT * FROM categories where cid = " + cid);
-			int tempCid;
-			String tempName;
+
 			while(result.next()){
-				tempCid = result.getInt("cid");
-				tempName = result.getString("name");
+				
+				
+				int tempCid = result.getInt("cid");
+				String tempName = result.getString("name");
+				log.debug("Found category: " + tempCid + " " + tempName);
 				category = new Category(tempCid, tempName);
 				return category;
 			}
 		} catch (Exception e) {
-			return null;
+			log.error("Error in searching category by ID");
+			e.printStackTrace();
 		}
+		
+		log.debug("Category with ID = " + cid +" not found");
+		
 		return null;
 	}
 	

@@ -36,6 +36,10 @@ public class Main {
 		System.out.println(categoriesList);
 		
 		
+		s.insertCategory("horror");
+		categoriesList= s.findCategoryByID(2);
+		System.out.println(categoriesList);
+		
 		
 		
 		

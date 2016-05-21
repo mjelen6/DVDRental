@@ -53,30 +53,61 @@ public class MainFrame extends DVDRental{
 	}
 	
 	
+	private void insertMoviesTable() {
+		
+		log.debug("Insert into moviesTable");
+		
+		movies = getAllMovies();
+		DefaultTableModel model = (DefaultTableModel) dvdTable.getModel();
+		model.getDataVector().removeAllElements();
+		model.fireTableDataChanged();
+		
+		log.debug("All movies:");
+		
+		if (!movies.isEmpty()) {
+			// System.out.println("lista filmow");
+			for (Movie movie : movies) {
+				log.debug(movie);
+				
+				Category category = findCategoryByID(movie.getCid());
+				model.addRow(new Object[] { movie.getName(), movie.getDirector(), category.getName(), 153 });
+			}
+		}
+	}
+	
 	
 	private void searchMovies() {
+		
+		log.debug("Searching for movies");
+		
 		String text = textField.getText();
 
 		log.debug("textField: " + text);
 		
+		DefaultTableModel model = (DefaultTableModel) dvdTable.getModel();
+		model.getDataVector().removeAllElements();
+		model.fireTableDataChanged();
 		
-		if (!text.isEmpty()) {
+		if(text.isEmpty()){
+			movies = getAllMovies();
+			
+		}
+	
+		else {
 			movies = findMovieByName(textField.getText());
-
-			DefaultTableModel model = (DefaultTableModel) dvdTable.getModel();
-			model.getDataVector().removeAllElements();
-			model.fireTableDataChanged();
-
-			if (!movies.isEmpty()) {
-				// System.out.println("lista filmow");
-				for (Movie movie : movies) {
-					log.debug("Movie \"" + movie + "\" added");
-					Category category = findCategoryByID(movie.getCid());
-					model.addRow(new Object[] { movie.getName(), movie.getDirector(), category.getName(), 153 });
-				}
+		}
+		
+		log.debug(movies.size() + " movies found");
+		
+		if (!movies.isEmpty()) {
+			// System.out.println("lista filmow");
+			log.debug("Found movies");
+			for (Movie movie : movies) {
+				log.debug(movie);
+				Category category = findCategoryByID(movie.getCid());
+				model.addRow(new Object[] { movie.getName(), movie.getDirector(), category.getName(), 153 });
 			}
 		}
-
 	}
 	
 	
@@ -142,7 +173,7 @@ public class MainFrame extends DVDRental{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				
 				log.debug("Enter on textField");
 				searchMovies();
 			}
@@ -157,7 +188,7 @@ public class MainFrame extends DVDRental{
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
+				
 				log.debug("Search button pressed");
 				searchMovies();
 				
@@ -214,19 +245,7 @@ public class MainFrame extends DVDRental{
 			}
 		});
 
-		
-		
-		movies = getAllMovies();
-		DefaultTableModel model = (DefaultTableModel) dvdTable.getModel();
-		model.getDataVector().removeAllElements();
-		model.fireTableDataChanged();
-		
-		System.out.println("lista filmow");
-		for(Movie movie : movies){
-			model.addRow(new Object[]{movie.getName(), movie.getDirector(), movie.getCid(), 3});
-		}
-		
-		
+		insertMoviesTable();		
 		
 		scrollPane = new JScrollPane(dvdTable);
 		tablePanel.add(scrollPane, BorderLayout.CENTER);

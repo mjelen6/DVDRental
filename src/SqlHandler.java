@@ -81,18 +81,13 @@ public class SqlHandler implements DVDRentInterface{
 	}
 
 	public boolean createTables(){
-		String createMoviesList = "CREATE TABLE IF NOT EXISTS movies_list (mid INTEGER PRIMARY KEY AUTOINCREMENT, cid integer, director varchar(255), name varchar(255), UNIQUE (name) )"; 
+		String createMoviesList = "CREATE TABLE IF NOT EXISTS movies_list (mid INTEGER PRIMARY KEY AUTOINCREMENT, category varchar(255), director varchar(255), name varchar(255), UNIQUE (name) )"; 
 		String createDvdList = "CREATE TABLE IF NOT EXISTS dvd_list (dvd_id INTEGER PRIMARY KEY AUTOINCREMENT, mid integer, available boolean )"; 
 		try {
 			state.execute(createMoviesList);
 			state.execute(createDvdList);
-//			state.execute(createLoanList);
 		} catch (SQLException e) {
-			log.error(e.getMessage());
-			log.error(e.getStackTrace());
-			
 			 System.err.println("Blad przy tworzeniu tabeli");
-	            e.printStackTrace();
 	            return false;
 		}
 		return true;
@@ -102,14 +97,15 @@ public class SqlHandler implements DVDRentInterface{
 	
 	
 	
-	public boolean insertMovie(int cid, String director, String name){
+	public boolean insertMovie(String category, String director, String name){
 		 try {
 	            PreparedStatement prepStmt = conn.prepareStatement(
 	                    "insert into movies_list values (NULL, ?, ?, ?);");
-	            prepStmt.setInt(1, cid);
+	            prepStmt.setString(1, category);
 	            prepStmt.setString(2, director);
 	            prepStmt.setString(3, name);
 	            prepStmt.execute();
+	            log.info("dodano film " + name);
 	        } catch (SQLException e) {
 	            log.error("movie " + name + " alredy exist");
 	            return false;
@@ -140,17 +136,19 @@ public class SqlHandler implements DVDRentInterface{
 		try {
 			ResultSet result = state.executeQuery("SELECT * FROM movies_list");
 			int mid;
-			int cid; 
+			String category; 
 			String name;
 			String director; 
 			while(result.next()){
 				mid = result.getInt("mid");
-				cid = result.getInt("cid");
+				category = result.getString("category");
 				name = result.getString("name");
 				director = result.getString("director");
-				movies.add(new Movie(mid, cid, name, director));
+				movies.add(new Movie(mid, category, name, director));
+				log.info("wyjeto film z bazy");
 			}
 		} catch (Exception e) {
+			log.error("blad przy wzieciu szystkich filmow");
 			log.error(e.getMessage());
 			log.error(e.getStackTrace());
 			return null;
@@ -185,15 +183,15 @@ public class SqlHandler implements DVDRentInterface{
 		try {
 			ResultSet result = state.executeQuery("SELECT * FROM movies_list where mid = " + mid );
 			int tempMid;
-			int tempCid; 
+			String tempCategory; 
 			String tempName;
 			String tempDirector; 
 			while(result.next()){
 				tempMid = result.getInt("mid");
-				tempCid = result.getInt("cid");
+				tempCategory = result.getString("category");
 				tempName = result.getString("name");
 				tempDirector = result.getString("director");
-				movie = new Movie(tempMid, tempCid, tempName, tempDirector);
+				movie = new Movie(tempMid, tempCategory, tempName, tempDirector);
 				return movie;
 			}
 		} catch (Exception e) {
@@ -206,15 +204,15 @@ public class SqlHandler implements DVDRentInterface{
 		try {
 			ResultSet result = state.executeQuery("SELECT * FROM movies_list where name=\"" + name +"\"");
 			int tempMid;
-			int tempCid; 
+			String tempCategory;  
 			String tempName;
 			String tempDirector; 
 			while(result.next()){
 				tempMid = result.getInt("mid");
-				tempCid = result.getInt("cid");
+				tempCategory = result.getString("category");
 				tempName = result.getString("name");
 				tempDirector = result.getString("director");
-				moviesList.add(new Movie(tempMid, tempCid, tempName, tempDirector));
+				moviesList.add(new Movie(tempMid, tempCategory, tempName, tempDirector));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

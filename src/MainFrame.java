@@ -49,11 +49,11 @@ public class MainFrame extends DVDRental{
 	private Box searchBox;
 	private Label insertLabel;
 	private JTextField titleField;
-	private JButton button;
+	private JButton addButton;
 	
 	private MoviesList movies;
 	private JTextField directorField;
-	private JTextField textField;
+	private JTextField categoryField;
 	private JPanel insertPanel;
 	private JPanel labelPanel;
 	private JPanel fieldPanel;
@@ -276,15 +276,22 @@ public class MainFrame extends DVDRental{
 		directorField.setHorizontalAlignment(SwingConstants.LEFT);
 		directorField.setColumns(20);
 		
-		textField = new JTextField();
-		fieldPanel.add(textField);
-		textField.setMaximumSize(new Dimension(166, 20));
-		textField.setHorizontalAlignment(SwingConstants.LEFT);
-		textField.setColumns(20);
+		categoryField = new JTextField();
+		fieldPanel.add(categoryField);
+		categoryField.setMaximumSize(new Dimension(166, 20));
+		categoryField.setHorizontalAlignment(SwingConstants.LEFT);
+		categoryField.setColumns(20);
 		
-		button = new JButton("Szukaj");
-		insertBox.add(button);
-		button.setAlignmentX(0.5f);
+		addButton = new JButton("Dodaj");
+		addButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				
+				
+			}
+		});
+		insertBox.add(addButton);
+		addButton.setAlignmentX(0.5f);
 		
 		verticalStrut_1 = Box.createVerticalStrut(20);
 		sideBar.add(verticalStrut_1);
@@ -301,6 +308,10 @@ public class MainFrame extends DVDRental{
 		panel.setLayout(new BorderLayout(0, 0));
 		
 		button_1 = new JButton("Szukaj");
+		button_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		button_1.setAlignmentX(0.5f);
 		verticalBox.add(button_1);
 		

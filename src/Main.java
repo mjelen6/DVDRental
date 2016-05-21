@@ -14,27 +14,31 @@ public class Main {
 		Movie m = new Movie();
 
 		SqlHandler s = new SqlHandler();
-		s.insertMovie(2, "ktos", "niznany");
-
+		s.insertMovie("komedia", "andrzej wajda", "dupa");
+		s.insertMovie("dramat ", "andrzej wajda wajda", "papa");
 		MoviesList movies = s.getAllMovies();
-
 		System.out.println("lista filmow");
 		for (Movie c : movies) {
 			System.out.println(c);
 		}
 
-		System.out.println("znaleziony film od id " + 14);
+		System.out.println("szukany film po id  " + 14);
 		m = s.findMovieByID(14);
 		System.out.println(m);
 
-
-
-		System.out.println("wszyskite egzemplarze ");
-		s.insertDvd(2, true);
-		DVDList dvdList =  s.getAllDvds();
-		for (DVD c : dvdList) {
+		System.out.println(" find movie by name " + "dupa");
+		movies = s.findMovieByName("dupa");
+		for (Movie c : movies) {
 			System.out.println(c);
 		}
+
+//
+//		System.out.println("wszyskite egzemplarze ");
+//		s.insertDvd(2, true);
+//		DVDList dvdList =  s.getAllDvds();
+//		for (DVD c : dvdList) {
+//			System.out.println(c);
+//		}
 		
 		
 		

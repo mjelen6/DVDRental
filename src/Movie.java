@@ -9,14 +9,14 @@ public class Movie {
 	private static Logger log = Logger.getLogger(Movie.class);
 	
 	private int mid;
-	private int cid; 
+	private String category; 
 	private String name;
 	private String director; 
 	
 	public Movie(){}
-	public Movie(int mid, int cid, String name, String director){
+	public Movie(int mid, String category, String name, String director){
 		this.mid= mid;
-		this.cid = cid;
+		this.category = category;
 		this.name = name; 
 		this.director = director;
 	}
@@ -27,11 +27,11 @@ public class Movie {
 	public void setMid(int mid) {
 		this.mid = mid;
 	}
-	public int getCid() {
-		return cid;
+	public String getCategory() {
+		return category;
 	}
-	public void setCid(int cid) {
-		this.cid = cid;
+	public void setCid(String category) {
+		this.category = category;
 	}
 	public String getName() {
 		return name;
@@ -47,7 +47,7 @@ public class Movie {
 	}
 	@Override
 	    public String toString() {
-	        return "["+mid+"] - "+name+" "+director;
+	        return "["+mid+"] - "+name+" "+ director + " category "+ category ;
 	    }
 	
 	

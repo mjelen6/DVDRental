@@ -30,6 +30,17 @@ public class Main {
 		m = s.findMovieByID(14);
 		System.out.println(m);
 		
+		
+		s.insertCategory("komedia");
+		CategoriesList categoriesList= s.getAllCategories();
+		for(Category c : categoriesList){
+			System.out.println(c);
+		}
+		
+		
+		
+		
+		
 		s.close();
 	}
 

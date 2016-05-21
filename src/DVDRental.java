@@ -24,6 +24,10 @@ public abstract class DVDRental {
 	public MoviesList findMovieByName(String name){
 		return dvdRentInterface.findMovieByName(name);
 	}
+	public Category findCategoryByID(int cid){
+		return dvdRentInterface.findCategoryByID(cid);
+		
+	}
 	
 	
 	

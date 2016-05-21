@@ -71,7 +71,8 @@ public class MainFrame extends DVDRental{
 				// System.out.println("lista filmow");
 				for (Movie movie : movies) {
 					log.debug("Movie \"" + movie + "\" added");
-					model.addRow(new Object[] { movie.getName(), movie.getDirector(), movie.getCid(), 153 });
+					Category category = findCategoryByID(movie.getCid());
+					model.addRow(new Object[] { movie.getName(), movie.getDirector(), category.getName(), 153 });
 				}
 			}
 		}

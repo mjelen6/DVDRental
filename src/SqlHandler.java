@@ -81,7 +81,7 @@ public class SqlHandler implements DVDRentInterface{
 	}
 
 	public boolean createTables(){
-		String createCategories = "CREATE TABLE IF NOT EXISTS categories (cid INTEGER PRIMARY KEY AUTOINCREMENT, name varchar(255))"; 
+		String createCategories = "CREATE TABLE IF NOT EXISTS categories (cid INTEGER PRIMARY KEY AUTOINCREMENT, name varchar(255), UNIQUE (name))"; 
 		String createMoviesList = "CREATE TABLE IF NOT EXISTS movies_list (mid INTEGER PRIMARY KEY AUTOINCREMENT, cid integer, director varchar(255), name varchar(255))"; 
 		String createDvdList = "CREATE TABLE IF NOT EXISTS dvd_list (dvd_id INTEGER PRIMARY KEY AUTOINCREMENT, mid integer, lent integer )"; 
 		String createLoanList = "CREATE TABLE IF NOT EXISTS loan_list (loan_id INTEGER PRIMARY KEY AUTOINCREMENT, dvd_id integer, user_name varchar(255), user_surname varchar(255), lent_date date, return_date date)"; 
@@ -114,20 +114,21 @@ public class SqlHandler implements DVDRentInterface{
 	            prepStmt.setString(3, name);
 	            prepStmt.execute();
 	        } catch (SQLException e) {
-	            System.err.println("Blad przy wstawianiu czytelnika");
+	            System.err.println("Blad przy wstawianiu filmu");
 	            e.printStackTrace();
 	            return false;
 	        }
 		return true;
 	}
 	public boolean insertCategory(String name){
-		 try {
+		 
+		try {
 	            PreparedStatement prepStmt = conn.prepareStatement(
 	                    "insert into categories values (NULL, ?);");
 	            prepStmt.setString(1, name);
 	            prepStmt.execute();
 	        } catch (SQLException e) {
-	            System.err.println("Blad przy wstawianiu czytelnika");
+	            System.err.println("Blad przy wstawianiu kategorii");
 	            e.printStackTrace();
 	            return false;
 	        }

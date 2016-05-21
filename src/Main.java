@@ -1,3 +1,4 @@
+import java.sql.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,9 +17,10 @@ public class Main {
 		SqlHandler s = new SqlHandler();
 		s.insertMovie("komedia", "andrzej wajda", "dupa");
 		s.insertMovie("dramat ", "andrzej wajda wajda", "papa");
-		MoviesList movies = s.getAllMovies();
+		MoviesList moviesss = s.getAllMovies();
+		Movie movies;
 		System.out.println("lista filmow");
-		for (Movie c : movies) {
+		for (Movie c : moviesss) {
 			System.out.println(c);
 		}
 
@@ -26,13 +28,26 @@ public class Main {
 		m = s.findMovieByID(14);
 		System.out.println(m);
 
-		System.out.println(" find movie by name " + "dupa");
-		movies = s.findMovieByName("dupa");
-		for (Movie c : movies) {
+		System.out.println(" find movie by name " + "papa");
+		movies = s.findMovieByName("papa");
+		System.out.println(movies);
+		
+		Date data = new Date(2015, 05, 21);
+		System.out.println("dodanie dvd");
+		s.insertDvd(2, true, "Jacek", "placek", data);
+		DVDList dvdList = s.getAllDvds();
+		for (DVD c : dvdList) {
 			System.out.println(c);
 		}
-
-//
+		
+		System.out.println("find dvd by name ");
+		dvdList = s.findDvdByName("papa");
+		for (DVD c : dvdList) {
+			System.out.println(c);
+		}
+		
+		
+		
 //		System.out.println("wszyskite egzemplarze ");
 //		s.insertDvd(2, true);
 //		DVDList dvdList =  s.getAllDvds();

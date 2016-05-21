@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import javax.naming.spi.DirStateFactory.Result;
 
@@ -82,7 +83,7 @@ public class SqlHandler implements DVDRentInterface{
 
 	public boolean createTables(){
 		String createMoviesList = "CREATE TABLE IF NOT EXISTS movies_list (mid INTEGER PRIMARY KEY AUTOINCREMENT, category varchar(255), director varchar(255), name varchar(255), UNIQUE (name) )"; 
-		String createDvdList = "CREATE TABLE IF NOT EXISTS dvd_list (dvd_id INTEGER PRIMARY KEY AUTOINCREMENT, mid integer, available boolean, user_name varchar(255) )"; 
+		String createDvdList = "CREATE TABLE IF NOT EXISTS dvd_list (dvd_id INTEGER PRIMARY KEY AUTOINCREMENT, mid integer, available boolean, user_name varchar(255), user_surname varchar(255), lent_date date)"; 
 		try {
 			state.execute(createMoviesList);
 			state.execute(createDvdList);
@@ -114,11 +115,14 @@ public class SqlHandler implements DVDRentInterface{
 	}
 
 
-	public boolean insertDvd(int mid, Boolean avaliable) {
+	public boolean insertDvd(int mid, Boolean avaliable, String userName, String userSurname, Date lentDate) {
 		try {
-			PreparedStatement prepStmt = conn.prepareStatement("insert into dvd_list values (NULL, ?, ?);");
+			PreparedStatement prepStmt = conn.prepareStatement("insert into dvd_list values (NULL, ?, ?, ?, ? , ?);");
 			prepStmt.setInt(1, mid);
 			prepStmt.setBoolean(2, avaliable);
+			prepStmt.setString(3, userName);
+			prepStmt.setString(4, userSurname);
+			prepStmt.setDate(5, lentDate);
 			prepStmt.execute();
 			log.info("dvd " + mid +  " added");
 		} catch (SQLException e) {
@@ -163,7 +167,11 @@ public class SqlHandler implements DVDRentInterface{
 				int dvdId = result.getInt("dvd_id");
 				int mid = result.getInt("mid");
 				Boolean available = result.getBoolean("available");
-				dvdList.add(new DVD(dvdId, mid, available));
+				String userName = result.getString("user_name");
+				String userSurname = result.getString("user_surname");
+				Date lentDate = result.getDate("lent_date");
+				
+				dvdList.add(new DVD(dvdId, mid, available, userName, userSurname, lentDate));
 				log.info("wyciagnieto dvd");				
 			}
 		} catch (Exception e) {
@@ -173,7 +181,15 @@ public class SqlHandler implements DVDRentInterface{
 		return dvdList;
 	}
 	
+	public int countAvaliableDvd(){
+		int countetr = 0;
 	
+		try {
+			ResultSet resul
+		} catch (Exception e) {
+		}
+		return countetr;
+	}
 	
 	
 	
@@ -199,8 +215,8 @@ public class SqlHandler implements DVDRentInterface{
 		}
 		return null;
 	}
-	public MoviesList findMovieByName(String name){
-		MoviesList moviesList = new MoviesList();
+	public Movie findMovieByName(String name){
+		Movie movie = null;
 		try {
 			ResultSet result = state.executeQuery("SELECT * FROM movies_list where name=\"" + name +"\"");
 			int tempMid;
@@ -212,14 +228,45 @@ public class SqlHandler implements DVDRentInterface{
 				tempCategory = result.getString("category");
 				tempName = result.getString("name");
 				tempDirector = result.getString("director");
-				moviesList.add(new Movie(tempMid, tempCategory, tempName, tempDirector));
+				movie = new Movie(tempMid, tempCategory, tempName, tempDirector);
+				log.info("znaleziono film");
 			}
 		} catch (Exception e) {
+			log.error("nie znaleziono filmu");
 			e.printStackTrace();
 		}
-		return moviesList;
+		return movie;
+	}
+
+	public DVDList findDvdByName(String name){
+		
+		DVDList dvdList = new DVDList();
+		
+		try {
+			ResultSet result = state.executeQuery("SELECT * from dvd_list where mid = ( Select mid from movies_list where name=\"" + name + "\")");
+			
+			
+			while(result.next()){
+				int dvdId = result.getInt("dvd_id");
+				int mid = result.getInt("mid");
+				Boolean available = result.getBoolean("available");
+				String userName = result.getString("user_name");
+				String userSurname = result.getString("user_surname");
+				Date lentDate = result.getDate("lent_date");
+				dvdList.add(new DVD(dvdId, mid, available, userName, userSurname, lentDate));
+				log.info("found dvd " + name + " " + dvdId );
+			}
+		} catch (Exception e) {
+			log.error("blad przy szukaniu dvd by name");
+			e.printStackTrace();
+		}
+		return dvdList;
 	}
 }
+
+
+
+
 //public boolean insertCategory(String name){
 //
 //try {

@@ -7,17 +7,11 @@ public class DVD {
 	String userName;
 	String userSurname;
 	Date lentDate;
-	/**
-	 * @param dvdId
-	 * @param mid
-	 * @param available
-	 */
-
-	
 	@Override
-    public String toString() {
-        return "["+dvdId+"] - "+mid+" "+available;
-    }
+	public String toString() {
+		return "DVD [dvdId=" + dvdId + ", mid=" + mid + ", available=" + available + ", userName=" + userName
+				+ ", userSurname=" + userSurname + ", lentDate=" + lentDate + "]";
+	}
 	public int getDvdId() {
 		return dvdId;
 	}

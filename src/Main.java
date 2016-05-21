@@ -15,8 +15,8 @@ public class Main {
 		Movie m = new Movie();
 
 		SqlHandler s = new SqlHandler();
-		s.insertMovie("komedia", "andrzej wajda", "dupa");
-		s.insertMovie("dramat ", "andrzej wajda wajda", "papa");
+		s.insertMovie("dupa","andrzej wajda","komedia");
+		s.insertMovie("papa", "andrzej wajda wajda","dramat ");
 		MoviesList moviesss = s.getAllMovies();
 		Movie movies;
 		System.out.println("lista filmow");
@@ -32,12 +32,13 @@ public class Main {
 		movies = s.findMovieByName("papa");
 		System.out.println(movies);
 		
-		Date data = new Date(2015, 05, 21);
+		Date data = new Date(2015, 5, 21);
 		System.out.println("dodanie dvd");
 		s.insertDvd(2, true, "Jacek", "placek", data);
 		DVDList dvdList = s.getAllDvds();
 		for (DVD c : dvdList) {
 			System.out.println(c);
+			System.out.println( c.getLentDate());
 		}
 		
 		System.out.println("find dvd by name ");

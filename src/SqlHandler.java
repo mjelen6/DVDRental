@@ -244,6 +244,26 @@ public class SqlHandler implements DVDRentInterface{
 		}
 		return null;
 	}
+	public MoviesList findMovieByName(String name){
+		MoviesList movie = null;
+		try {
+			ResultSet result = state.executeQuery("SELECT * FROM movies_list where name = " + name );
+			int tempMid;
+			int tempCid; 
+			String tempName;
+			String tempDirector; 
+			while(result.next()){
+				tempMid = result.getInt("mid");
+				tempCid = result.getInt("cid");
+				tempName = result.getString("name");
+				tempDirector = result.getString("director");
+				movie.add(new Movie(tempMid, tempCid, tempName, tempDirector));
+			}
+		} catch (Exception e) {
+			return null;
+		}
+		return movie;
+	}
 	public Category findCategoryByID(int cid){
 		Category category;
 		try {

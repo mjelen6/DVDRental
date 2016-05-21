@@ -19,6 +19,10 @@ public abstract class DVDRental {
 		return dvdRentInterface.findMovieByName(name);
 	}
 	
+	public boolean insertMovie(String name, String director, String category){
+		return dvdRentInterface.insertMovie(name, director, category);
+	}
+	
 	
 	
 }

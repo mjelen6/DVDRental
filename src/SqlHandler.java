@@ -268,7 +268,7 @@ public class SqlHandler implements DVDRentInterface{
 	public Category findCategoryByID(int cid){
 		Category category;
 		try {
-			ResultSet result = state.executeQuery("SELECT * FROM categories where mid = " + cid);
+			ResultSet result = state.executeQuery("SELECT * FROM categories where cid = " + cid);
 			int tempCid;
 			String tempName;
 			while(result.next()){

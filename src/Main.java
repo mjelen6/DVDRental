@@ -32,10 +32,8 @@ public class Main {
 		
 		
 		s.insertCategory("komedia");
-		CategoriesList categoriesList= s.getAllCategories();
-		for(Category c : categoriesList){
-			System.out.println(c);
-		}
+		Category categoriesList= s.findCategoryByID(1);
+		System.out.println(categoriesList);
 		
 		
 		

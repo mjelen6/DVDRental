@@ -119,10 +119,13 @@ public class MainFrame extends DVDRental{
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				MoviesList movies = getAllMovies();
+				DefaultTableModel model = (DefaultTableModel) dvdTable.getModel();
+				model.getDataVector().removeAllElements();
+				model.fireTableDataChanged();
 				
 				System.out.println("lista filmow");
-				for(Movie c : movies){
-					System.out.println(c);
+				for(Movie movie : movies){
+					model.addRow(new Object[]{movie.getName(), movie.getDirector(), movie.getCid(), 3});
 				}
 			}
 		});
@@ -167,6 +170,12 @@ public class MainFrame extends DVDRental{
 			};
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
+			}
+			boolean[] columnEditables = new boolean[] {
+				false, false, false, false
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
 			}
 		});
 

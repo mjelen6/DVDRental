@@ -120,7 +120,7 @@ public class SqlHandler implements DVDRentInterface{
 	        }
 		return true;
 	}
-	public boolean insertCategories(String name){
+	public boolean insertCategory(String name){
 		 try {
 	            PreparedStatement prepStmt = conn.prepareStatement(
 	                    "insert into categories values (NULL, ?);");
@@ -133,21 +133,21 @@ public class SqlHandler implements DVDRentInterface{
 	        }
 		return true;
 	}
-	public boolean insertLoan(int dvdId, String userName, String userSurname, Date lentDate, Date returnDate){
-		 try {
-	            PreparedStatement prepStmt = conn.prepareStatement(
-	                    "insert into loan_list values (NULL, ?, ? , ? );");
-	            prepStmt.setInt(1, dvdId);
-	            prepStmt.setString(2, userName);
-	            prepStmt.setString(3, userSurname);
-	            prepStmt.setDate(4, lentDate);
-	            prepStmt.setDate(5, returnDate);
-	            prepStmt.execute();
-	        } catch (SQLException e) {
-	            System.err.println("Blad przy wstawianiu wypozyczenia");
-	            e.printStackTrace();
-	            return false;
-	        }
+
+	public boolean insertLoan(int dvdId, String userName, String userSurname, Date lentDate, Date returnDate) {
+		try {
+			PreparedStatement prepStmt = conn.prepareStatement("insert into loan_list values (NULL, ?, ?, ?);");
+			prepStmt.setInt(1, dvdId);
+			prepStmt.setString(2, userName);
+			prepStmt.setString(3, userSurname);
+			prepStmt.setDate(4, lentDate);
+			prepStmt.setDate(5, returnDate);
+			prepStmt.execute();
+		} catch (SQLException e) {
+			System.err.println("Blad przy wstawianiu wypozyczenia");
+			e.printStackTrace();
+			return false;
+		}
 		return true;
 	}
 	
@@ -176,8 +176,8 @@ public class SqlHandler implements DVDRentInterface{
 		}
 		return movies;
 	}
-	public List<Categories> getAllCategories(){
-		List<Categories> categories = new LinkedList<Categories>();
+	public CategoriesList getAllCategories(){
+		CategoriesList categories = new CategoriesList();
 		try {
 			ResultSet result = state.executeQuery("SELECT * FROM categories");
 			int cid; 
@@ -185,7 +185,7 @@ public class SqlHandler implements DVDRentInterface{
 			while(result.next()){
 				cid = result.getInt("cid");
 				name = result.getString("name");
-				categories.add(new Categories(cid, name));
+				categories.add(new Category(cid, name));
 			}
 		} catch (Exception e) {
 			return null;
@@ -242,10 +242,10 @@ public class SqlHandler implements DVDRentInterface{
 		} catch (Exception e) {
 			return null;
 		}
-		return movie = new Movie();
+		return null;
 	}
-	public Categories findCategorieByID(int cid){
-		Categories categories;
+	public Category findCategoryByID(int cid){
+		Category category;
 		try {
 			ResultSet result = state.executeQuery("SELECT * FROM categories where mid = " + cid);
 			int tempCid;
@@ -253,13 +253,13 @@ public class SqlHandler implements DVDRentInterface{
 			while(result.next()){
 				tempCid = result.getInt("cid");
 				tempName = result.getString("name");
-				categories = new Categories(tempCid, tempName);
-				return categories;
+				category = new Category(tempCid, tempName);
+				return category;
 			}
 		} catch (Exception e) {
 			return null;
 		}
-		return categories = new Categories();
+		return null;
 	}
 	
 	
@@ -285,9 +285,9 @@ public class SqlHandler implements DVDRentInterface{
 				return loan;
 			}
 		} catch (Exception e) {
-			return null;
+			e.printStackTrace();
 		}
-		return loan = new Loan();
+		return null;
 	}
 
 

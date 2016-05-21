@@ -1,11 +1,11 @@
 
-public class Categories {
+public class Category {
 	private int cid; 
 	private String name; 
 	
 	
-	public Categories(){}
-	public Categories(int cid, String name){
+	public Category(){}
+	public Category(int cid, String name){
 		this.setName(name);
 		this.setCid(cid);
 	}

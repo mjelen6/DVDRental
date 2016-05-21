@@ -35,16 +35,19 @@ public class MainFrame extends DVDRental{
 	private JLabel title;
 	private JTable dvdTable;
 	private JScrollPane scrollPane;
-	private JTextField textField;
+	private JTextField searchTextField;
 	private JButton searchButton;
 	private Box searchBox;
 	private Component verticalGlue;
-	private Component verticalGlue_1;
-	private Component verticalGlue_3;
-	private Component verticalGlue_4;
 
 	
 	private MoviesList movies;
+	private Box insertBox;
+	private Label label_1;
+	private JTextField textField_1;
+	private JButton button;
+	private Component verticalGlue_1;
+	private Component verticalGlue_2;
 	
 	
 	
@@ -154,25 +157,25 @@ public class MainFrame extends DVDRental{
 		
 		searchBox = Box.createVerticalBox();
 		searchBox.setAlignmentX(Component.CENTER_ALIGNMENT);
-		sideBar.add(searchBox);
-		Label label = new Label("Szukaj");
-		label.setFont(new Font("Arial", Font.BOLD, 16));
-		searchBox.add(label);
+		sideBar.add(searchBox, BorderLayout.NORTH);
+		Label searchLabel = new Label("Szukaj");
+		searchLabel.setFont(new Font("Arial", Font.BOLD, 16));
+		searchBox.add(searchLabel);
 		
 		
-		textField = new JTextField();
-		searchBox.add(textField);
-		textField.setColumns(20);
-		textField.setMaximumSize( textField.getPreferredSize() );
-		textField.setHorizontalAlignment(SwingConstants.LEFT);
-		textField.addActionListener(new ActionListener() {
+		searchTextField = new JTextField();
+		searchBox.add(searchTextField);
+		searchTextField.setColumns(20);
+		searchTextField.setMaximumSize( searchTextField.getPreferredSize() );
+		searchTextField.setHorizontalAlignment(SwingConstants.LEFT);
+		searchTextField.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
 				log.debug("Enter on textField");
 				
-				movies = searchMovies(textField.getText());
+				movies = searchMovies(searchTextField.getText());
 				eraseMoviesTable();
 				insertMoviesTable(movies);
 				
@@ -191,27 +194,41 @@ public class MainFrame extends DVDRental{
 				
 				log.debug("Search button pressed");
 				
-				movies = searchMovies(textField.getText());
+				movies = searchMovies(searchTextField.getText());
 				eraseMoviesTable();
 				insertMoviesTable(movies);
 				
 
 			}
 		});
-		
-		
-		verticalGlue_4 = Box.createVerticalGlue();
-		searchBox.add(verticalGlue_4);
-		
-		verticalGlue_3 = Box.createVerticalGlue();
-		searchBox.add(verticalGlue_3);
-		
-		verticalGlue_1 = Box.createVerticalGlue();
-		searchBox.add(verticalGlue_1);
+		mainPanel.add(sideBar, BorderLayout.WEST);
 		
 		verticalGlue = Box.createVerticalGlue();
-		searchBox.add(verticalGlue);
-		mainPanel.add(sideBar, BorderLayout.WEST);
+		sideBar.add(verticalGlue, BorderLayout.CENTER);
+		
+		insertBox = Box.createVerticalBox();
+		sideBar.add(insertBox, BorderLayout.CENTER);
+		insertBox.setAlignmentX(0.5f);
+		
+		label_1 = new Label("Szukaj");
+		label_1.setFont(new Font("Arial", Font.BOLD, 16));
+		insertBox.add(label_1);
+		
+		textField_1 = new JTextField();
+		textField_1.setMaximumSize(new Dimension(166, 20));
+		textField_1.setHorizontalAlignment(SwingConstants.LEFT);
+		textField_1.setColumns(20);
+		insertBox.add(textField_1);
+		
+		button = new JButton("Szukaj");
+		button.setAlignmentX(0.5f);
+		insertBox.add(button);
+		
+		verticalGlue_1 = Box.createVerticalGlue();
+		sideBar.add(verticalGlue_1, BorderLayout.SOUTH);
+		
+		verticalGlue_2 = Box.createVerticalGlue();
+		sideBar.add(verticalGlue_2, BorderLayout.SOUTH);
 		
 		// Create tablepanel
 		tablePanel = new JPanel(new BorderLayout());

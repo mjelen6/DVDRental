@@ -1,13 +1,7 @@
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 public abstract class DVDRental {
 
-	
 	private static Logger log = Logger.getLogger(DVDRental.class);
 	
 	private DVDRentInterface dvdRentInterface;
@@ -25,8 +19,7 @@ public abstract class DVDRental {
 		return dvdRentInterface.findMovieByName(name);
 	}
 	public Category findCategoryByID(int cid){
-		return dvdRentInterface.findCategoryByID(cid);
-		
+		return dvdRentInterface.findCategoryByID(cid);		
 	}
 	
 	

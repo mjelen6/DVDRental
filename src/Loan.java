@@ -1,13 +1,9 @@
 import java.sql.Date;
-import java.text.SimpleDateFormat;
-import java.util.GregorianCalendar;
-
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 public class Loan {
 	
-	private static Logger log = Logger.getLogger(Movie.class);
+	private static Logger log = Logger.getLogger(Loan.class);
 	
 	private int loanId;
 	private int dvdId;
@@ -17,14 +13,14 @@ public class Loan {
 	private Date returnDate; 
 	
 	public Loan(){}
-	public Loan(int loanId, int dvdId,String userName, String userSurname,Date lentDate, Date returnDate){
+	public Loan(int loanId, int dvdId, String userName, String userSurname, Date lentDate, Date returnDate){
 		this.setLoanId(loanId);
 		this.setDvdId(dvdId); 
 		this.setUserName(userName);
 		this.setUserSurname(userSurname);
 		this.setLentDate(lentDate);
-		this.setReturnDate(returnDate);
-		
+		this.setReturnDate(returnDate);	
+		log.debug("New loan with ID: " + loanId);
 	}
 	public int getLoanId() {
 		return loanId;

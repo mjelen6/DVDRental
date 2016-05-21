@@ -81,15 +81,12 @@ public class SqlHandler implements DVDRentInterface{
 	}
 
 	public boolean createTables(){
-		String createCategories = "CREATE TABLE IF NOT EXISTS categories (cid INTEGER PRIMARY KEY AUTOINCREMENT, name varchar(255), UNIQUE (name))"; 
-		String createMoviesList = "CREATE TABLE IF NOT EXISTS movies_list (mid INTEGER PRIMARY KEY AUTOINCREMENT, cid integer, director varchar(255), name varchar(255))"; 
-		String createDvdList = "CREATE TABLE IF NOT EXISTS dvd_list (dvd_id INTEGER PRIMARY KEY AUTOINCREMENT, mid integer, lent integer )"; 
-		String createLoanList = "CREATE TABLE IF NOT EXISTS loan_list (loan_id INTEGER PRIMARY KEY AUTOINCREMENT, dvd_id integer, user_name varchar(255), user_surname varchar(255), lent_date date, return_date date)"; 
+		String createMoviesList = "CREATE TABLE IF NOT EXISTS movies_list (mid INTEGER PRIMARY KEY AUTOINCREMENT, cid integer, director varchar(255), name varchar(255), UNIQUE (name) )"; 
+		String createDvdList = "CREATE TABLE IF NOT EXISTS dvd_list (dvd_id INTEGER PRIMARY KEY AUTOINCREMENT, mid integer, available boolean )"; 
 		try {
-			state.execute(createCategories);
 			state.execute(createMoviesList);
 			state.execute(createDvdList);
-			state.execute(createLoanList);
+//			state.execute(createLoanList);
 		} catch (SQLException e) {
 			log.error(e.getMessage());
 			log.error(e.getStackTrace());
@@ -114,44 +111,27 @@ public class SqlHandler implements DVDRentInterface{
 	            prepStmt.setString(3, name);
 	            prepStmt.execute();
 	        } catch (SQLException e) {
-	            System.err.println("Blad przy wstawianiu filmu");
-	            e.printStackTrace();
-	            return false;
-	        }
-		return true;
-	}
-	public boolean insertCategory(String name){
-		 
-		try {
-	            PreparedStatement prepStmt = conn.prepareStatement(
-	                    "insert into categories values (NULL, ?);");
-	            prepStmt.setString(1, name);
-	            prepStmt.execute();
-	        } catch (SQLException e) {
-	            System.err.println("Blad przy wstawianiu kategorii");
-	            e.printStackTrace();
+	            log.error("movie " + name + " alredy exist");
 	            return false;
 	        }
 		return true;
 	}
 
-	public boolean insertLoan(int dvdId, String userName, String userSurname, Date lentDate, Date returnDate) {
+
+	public boolean insertDvd(int mid, Boolean avaliable) {
 		try {
-			PreparedStatement prepStmt = conn.prepareStatement("insert into loan_list values (NULL, ?, ?, ?);");
-			prepStmt.setInt(1, dvdId);
-			prepStmt.setString(2, userName);
-			prepStmt.setString(3, userSurname);
-			prepStmt.setDate(4, lentDate);
-			prepStmt.setDate(5, returnDate);
+			PreparedStatement prepStmt = conn.prepareStatement("insert into dvd_list values (NULL, ?, ?);");
+			prepStmt.setInt(1, mid);
+			prepStmt.setBoolean(2, avaliable);
 			prepStmt.execute();
+			log.info("dvd " + mid +  " added");
 		} catch (SQLException e) {
-			System.err.println("Blad przy wstawianiu wypozyczenia");
+			System.err.println("Blad przy wstawianiu plyty dvd");
 			e.printStackTrace();
 			return false;
 		}
 		return true;
 	}
-	
 	
 	
 	@Override
@@ -177,47 +157,23 @@ public class SqlHandler implements DVDRentInterface{
 		}
 		return movies;
 	}
-	public CategoriesList getAllCategories(){
-		CategoriesList categories = new CategoriesList();
+	public DVDList getAllDvds(){
+		DVDList dvdList = new DVDList();
 		try {
-			ResultSet result = state.executeQuery("SELECT * FROM categories");
-			int cid; 
-			String name;
+			ResultSet result = state.executeQuery("SELECT * FROM dvd_list");
 			while(result.next()){
-				cid = result.getInt("cid");
-				name = result.getString("name");
-				categories.add(new Category(cid, name));
+				int dvdId = result.getInt("dvd_id");
+				int mid = result.getInt("mid");
+				Boolean available = result.getBoolean("available");
+				dvdList.add(new DVD(dvdId, mid, available));
+				log.info("wyciagnieto dvd");				
 			}
 		} catch (Exception e) {
-			return null;
+			e.printStackTrace();
+			log.error("blad przy wyci¹ganiu dvd");
 		}
-		return categories;
+		return dvdList;
 	}
-	public List<Loan> getAllLoan(){
-		List<Loan> loans = new LinkedList<Loan>();
-		try {
-			ResultSet result = state.executeQuery("SELECT * FROM loan_list");
-			int loanId;
-			int dvdId;
-			String userName;
-			String userSurname;
-			Date lentDate;
-			Date returnDate;
-			while(result.next()){
-				loanId = result.getInt("loan_id");
-				dvdId = result.getInt("dvd_id");
-				userName = result.getString("user_name");
-				userSurname = result.getString("user_surname");
-				lentDate = result.getDate("lent_date");
-				returnDate = result.getDate("result_date");
-				loans.add(new Loan(loanId, dvdId, userName, userSurname, lentDate, returnDate));
-			}
-		} catch (Exception e) {
-			return null;
-		}
-		return loans;
-	}
-	
 	
 	
 	
@@ -265,248 +221,91 @@ public class SqlHandler implements DVDRentInterface{
 		}
 		return moviesList;
 	}
-	public Category findCategoryByID(int cid){
-		
-		log.debug("Finding category by ID");	
-		
-		Category category;
-		try {
-			
-			log.debug("SQL Query: " + "SELECT * FROM categories where cid = " + cid);
-			ResultSet result = state.executeQuery("SELECT * FROM categories where cid = " + cid);
-
-			while(result.next()){
-				
-				
-				int tempCid = result.getInt("cid");
-				String tempName = result.getString("name");
-				log.debug("Found category: " + tempCid + " " + tempName);
-				category = new Category(tempCid, tempName);
-				return category;
-			}
-		} catch (Exception e) {
-			log.error("Error in searching category by ID");
-			e.printStackTrace();
-		}
-		
-		log.debug("Category with ID = " + cid +" not found");
-		
-		return null;
-	}
-	
-	
-	
-	public Loan findLoanByID(int loanId){
-		Loan loan;
-		try {
-			ResultSet result = state.executeQuery("SELECT * FROM loan_list where mid = " + loanId );
-			int tempLoanId;
-			int tempDvdId;
-			String tempUserName;
-			String tempUserSurname;
-			Date tempLentDate;
-			Date tempReturnDate;
-			while(result.next()){
-				tempLoanId = result.getInt("loan_id");
-				tempDvdId = result.getInt("dvd_id");
-				tempUserName = result.getString("user_name");
-				tempUserSurname = result.getString("user_surname");
-				tempLentDate = result.getDate("lent_date");
-				tempReturnDate = result.getDate("return_date");
-				loan = new Loan(tempLoanId, tempDvdId, tempUserName, tempUserSurname, tempLentDate, tempReturnDate);
-				return loan;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-
-	
-	
-	
-	/*
-	 * Table: CHANNEL stid INTEGER NOT NULL name TEXT NOT NULL url TEXT NOT NULL
-	 * PRIMARY KEY(stid)
-	 * 
-	 * Table: PROGRAM prid INTEGER NOT NULL name TEXT NOT NULL year INTEGER NOT
-	 * NULL month INTEGER NOT NULL day INTEGER NOT NULL hour INTEGER minute
-	 * INTEGER url TEXT NOT NULL info TEXT stid INTEGER NOT NULL PRIMARY
-	 * KEY(prid) FOREIGN KEY(stid) REFERENCES CHANNEL(stid) ON DELETE CASCADE ON
-	 * UPDATE CASCADE
-	 */
-
-	/**
-	 * Method that insert channel list to database table.
-	 * @param channels List of channels to insert
-	 */
-//	public void insert(Channels channels) {
-//
-//		
-//		try {
-//			log.info("Drop table...");
-//			stat.executeUpdate("drop table if exists CHANNEL;");
-//			log.info("Table dropped");
-//		} catch (SQLException e) {
-//			log.error(e.getMessage());
-//			log.error(e.getStackTrace());
-//		}
-//
-//		try {
-//			stat.execute("PRAGMA foreign_keys = ON");
-//		} catch (SQLException e) {
-//			log.error(e.getMessage());
-//			log.error(e.getStackTrace());
-//		}
-//
-//		try {
-//			stat.executeUpdate("create table CHANNEL ("
-//					+ "stid INTEGER NOT NULL, " + "name TEXT NOT NULL, "
-//					+ "url TEXT NOT NULL, " + "PRIMARY KEY(stid));");
-//			log.info("Table CHANNEL created");
-//		} catch (SQLException e) {
-//			log.error(e.getMessage());
-//			log.error(e.getStackTrace());
-//		}
-//
-//		PreparedStatement prep = null;
-//
-//		try {
-//			prep = conn
-//					.prepareStatement("insert into CHANNEL values (?, ?, ?);");
-//
-//			log.info("Create rows");
-//			for (Channel c : channels) {
-//				prep.setString(1, Integer.toString(c.getStid()));
-//				prep.setString(2, c.getName());
-//				prep.setString(3, c.getUrl().toString());
-//				prep.addBatch();
-//			}
-//			log.info("Rows created.");
-//			
-//		} catch (SQLException e) {
-//			log.error(e.getMessage());
-//			log.error(e.getStackTrace());
-//		}
-//
-//		try {
-//			log.info("ExecuteBatch");
-//			prep.executeBatch();
-//			log.info("Batch finished. Closing..");
-//			prep.close();
-//			log.info("Closed");
-//
-//		} catch (SQLException e) {
-//			log.error(e.getMessage());
-//			log.error(e.getStackTrace());
-//		}
-//		
-//		
-//		log.info("Channels insert completed.");
-//	}
-//
-	
-	/**
-	 * Method that insert Program list to database table named as channel.
-	 * @param programs Programs to stored
-	 * @param channel Channel which has that programs
-	 */
-/*	public void insert(Programs programs, Channel channel) {
-
-		insert(programs, channel.getName().replaceAll("\\W", ""));
-
-	}
-*/
-	/**
-	 * Method that insert Program list to database table named as String argument.
-	 * @param programs Programs to stored
-	 * @param tableName Name of table
-	 */
-//	public void insert(Programs programs, String tableName) {
-//
-//		Statement stat = null;
-//		try {
-//			stat = conn.createStatement();
-//		} catch (SQLException e) {
-//			log.error(e.getMessage());
-//			log.error(e.getStackTrace());
-//		}
-//
-//		try {
-//			log.info("Drop table " + tableName + "...");
-//			stat.executeUpdate("drop table if exists " + tableName + ";");
-//			log.info("Table dropped");
-//		} catch (SQLException e) {
-//			log.error(e.getMessage());
-//			log.error(e.getStackTrace());
-//		}
-//
-//		try {
-//			stat.execute("PRAGMA foreign_keys = ON");
-//		} catch (SQLException e) {
-//			log.error(e.getMessage());
-//			log.error(e.getStackTrace());
-//		}
-//		/*
-//		 * Table: PROGRAM prid INTEGER NOT NULL name TEXT NOT NULL year INTEGER
-//		 * NOT NULL month INTEGER NOT NULL day INTEGER NOT NULL hour INTEGER
-//		 * minute INTEGER url TEXT NOT NULL info TEXT PRIMARY KEY(prid)
-//		 */
-//
-//		try {
-//			stat.executeUpdate("create table " + tableName + " ("
-//					+ "prid INTEGER NOT NULL, " + "name TEXT NOT NULL, "
-//					+ "year INTEGER NOT NULL, " + "month INTEGER NOT NULL, "
-//					+ "day INTEGER NOT NULL, " + "hour INTEGER, "
-//					+ "minute INTEGER, " + "url TEXT NOT NULL, "
-//					+ "info TEXT, " + "PRIMARY KEY(prid));");
-//			log.info("Table " + tableName + " created");
-//		} catch (SQLException e) {
-//			log.error(e.getMessage());
-//			log.error(e.getStackTrace());
-//		}
-//
-//		PreparedStatement prep = null;
-//
-//		try {
-//			prep = conn.prepareStatement("insert into " + tableName
-//					+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?);");
-//
-//			log.info("Create rows");
-//
-//			for (Program p : programs) {
-//
-//				prep.setString(1, Integer.toString(p.getPrid()));
-//				prep.setString(2, p.getName());
-//				prep.setString(3, Integer.toString(p.getYear()));
-//				prep.setString(4, Integer.toString(p.getMonth()));
-//				prep.setString(5, Integer.toString(p.getDay()));
-//				prep.setString(6, Integer.toString(p.getHour()));
-//				prep.setString(7, Integer.toString(p.getMinute()));
-//				prep.setString(8, p.getUrl().toString());
-//				prep.setString(9, p.getInfo());
-//				prep.addBatch();
-//			}
-//
-//		} catch (SQLException e) {
-//			log.error(e.getMessage());
-//			log.error(e.getStackTrace());
-//		}
-//
-//		try {
-//			log.info("ExecuteBatch");
-//			prep.executeBatch();
-//			log.info("Batch finished. Closing...");
-//			prep.close();
-//			log.info("Closed");
-//
-//		} catch (SQLException e) {
-//			log.error(e.getMessage());
-//			log.error(e.getStackTrace());
-//		}
-//
-//		log.info( tableName + " - programs inserted.");
-//	}
-
 }
+//public boolean insertCategory(String name){
+//
+//try {
+//       PreparedStatement prepStmt = conn.prepareStatement(
+//               "insert into categories values (NULL, ?);");
+//       prepStmt.setString(1, name);
+//       prepStmt.execute();
+//   } catch (SQLException e) {
+//   	log.error("category: " + name +  " arledy exist");
+//       return false;
+//   }
+//return true;
+//}
+//public boolean insertLoan(int dvdId, String userName, String userSurname, Date lentDate, Date returnDate) {
+//try {
+//	PreparedStatement prepStmt = conn.prepareStatement("insert into loan_list values (NULL, ?, ?, ?);");
+//	prepStmt.setInt(1, dvdId);
+//	prepStmt.setString(2, userName);
+//	prepStmt.setString(3, userSurname);
+//	prepStmt.setDate(4, lentDate);
+//	prepStmt.setDate(5, returnDate);
+//	prepStmt.execute();
+//} catch (SQLException e) {
+//	System.err.println("Blad przy wstawianiu wypozyczenia");
+//	e.printStackTrace();
+//	return false;
+//}
+//return true;
+//}
+
+//public Category findCategoryByID(int cid){
+//
+//log.debug("Finding category by ID");	
+//
+//Category category;
+//try {
+//	
+//	log.debug("SQL Query: " + "SELECT * FROM categories where cid = " + cid);
+//	ResultSet result = state.executeQuery("SELECT * FROM categories where cid = " + cid);
+//
+//	while(result.next()){
+//		
+//		
+//		int tempCid = result.getInt("cid");
+//		String tempName = result.getString("name");
+//		log.debug("Found category: " + tempCid + " " + tempName);
+//		category = new Category(tempCid, tempName);
+//		return category;
+//	}
+//} catch (Exception e) {
+//	log.error("Error in searching category by ID");
+//	e.printStackTrace();
+//}
+//
+//log.debug("Category with ID = " + cid +" not found");
+//
+//return null;
+//}
+//
+//public Loan findLoanByID(int loanId){
+//Loan loan;
+//try {
+//	ResultSet result = state.executeQuery("SELECT * FROM loan_list where mid = " + loanId );
+//	int tempLoanId;
+//	int tempDvdId;
+//	String tempUserName;
+//	String tempUserSurname;
+//	Date tempLentDate;
+//	Date tempReturnDate;
+//	while(result.next()){
+//		tempLoanId = result.getInt("loan_id");
+//		tempDvdId = result.getInt("dvd_id");
+//		tempUserName = result.getString("user_name");
+//		tempUserSurname = result.getString("user_surname");
+//		tempLentDate = result.getDate("lent_date");
+//		tempReturnDate = result.getDate("return_date");
+//		loan = new Loan(tempLoanId, tempDvdId, tempUserName, tempUserSurname, tempLentDate, tempReturnDate);
+//		return loan;
+//	}
+//} catch (Exception e) {
+//	e.printStackTrace();
+//}
+//return null;
+//}
+//
+//}
+	

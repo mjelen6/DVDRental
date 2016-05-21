@@ -3,18 +3,18 @@
 public class DVD {
 	int dvdId; 
 	int mid; 
-	boolean lent;
+	boolean available;
 	/**
 	 * @param dvdId
 	 * @param mid
-	 * @param lent
+	 * @param available
 	 */
-	public DVD(int dvdId, int mid, boolean lent) {
+	public DVD(int dvdId, int mid, boolean available) {
 		
 		super();
 		this.dvdId = dvdId;
 		this.mid = mid;
-		this.lent = lent;
+		this.available = available;
 	}
 	public int getDvdId() {
 		return dvdId;
@@ -29,9 +29,14 @@ public class DVD {
 		this.mid = mid;
 	}
 	public boolean isLent() {
-		return lent;
+		return available;
 	}
 	public void setLent(boolean lent) {
-		this.lent = lent;
+		this.available = lent;
 	}
+	
+	@Override
+    public String toString() {
+        return "["+dvdId+"] - "+mid+" "+available;
+    }
 }

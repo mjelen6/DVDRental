@@ -53,61 +53,57 @@ public class MainFrame extends DVDRental{
 	}
 	
 	
-	private void insertMoviesTable() {
-		
-		log.debug("Insert into moviesTable");
-		
-		movies = getAllMovies();
+	private void insertRowInMoviesTable(Movie movie) {
+				
+		DefaultTableModel model = (DefaultTableModel) dvdTable.getModel();
+		Category category = findCategoryByID(movie.getCid());
+		model.addRow(new Object[] { movie.getName(), movie.getDirector(), category.getName(), 153 });
+		log.trace(movie + " inserted");	
+	}
+	
+	private void eraseMoviesTable() {
+		log.trace("Erasing movies table");
+
 		DefaultTableModel model = (DefaultTableModel) dvdTable.getModel();
 		model.getDataVector().removeAllElements();
 		model.fireTableDataChanged();
 		
-		log.debug("All movies:");
-		
-		if (!movies.isEmpty()) {
-			// System.out.println("lista filmow");
-			for (Movie movie : movies) {
-				log.debug(movie);
-				
-				Category category = findCategoryByID(movie.getCid());
-				model.addRow(new Object[] { movie.getName(), movie.getDirector(), category.getName(), 153 });
+		log.trace("Movies table cleared");
+	}
+	
+	private void insertMoviesTable(MoviesList moviesList) {
+
+		log.trace("Inserting into moviesTable:");
+
+		if (!moviesList.isEmpty()) {
+			
+			for (Movie movie : moviesList) {
+				insertRowInMoviesTable(movie);
 			}
 		}
 	}
 	
 	
-	private void searchMovies() {
+	
+	private MoviesList searchMovies(String nameOrDirector) {
 		
-		log.debug("Searching for movies");
-		
-		String text = textField.getText();
+		log.trace("Searching for movies");
 
-		log.debug("textField: " + text);
+		log.trace("Search for: " + nameOrDirector);
 		
-		DefaultTableModel model = (DefaultTableModel) dvdTable.getModel();
-		model.getDataVector().removeAllElements();
-		model.fireTableDataChanged();
+		MoviesList movies;
 		
-		if(text.isEmpty()){
-			movies = getAllMovies();
-			
+		if(nameOrDirector.isEmpty()){
+			movies = getAllMovies();		
 		}
 	
 		else {
-			movies = findMovieByName(textField.getText());
+			movies = findMovieByName(nameOrDirector);
 		}
 		
 		log.debug(movies.size() + " movies found");
 		
-		if (!movies.isEmpty()) {
-			// System.out.println("lista filmow");
-			log.debug("Found movies");
-			for (Movie movie : movies) {
-				log.debug(movie);
-				Category category = findCategoryByID(movie.getCid());
-				model.addRow(new Object[] { movie.getName(), movie.getDirector(), category.getName(), 153 });
-			}
-		}
+		return movies;
 	}
 	
 	
@@ -175,7 +171,11 @@ public class MainFrame extends DVDRental{
 			public void actionPerformed(ActionEvent e) {
 				
 				log.debug("Enter on textField");
-				searchMovies();
+				
+				movies = searchMovies(textField.getText());
+				eraseMoviesTable();
+				insertMoviesTable(movies);
+				
 			}
 		});
 		
@@ -190,7 +190,10 @@ public class MainFrame extends DVDRental{
 			public void actionPerformed(ActionEvent arg0) {
 				
 				log.debug("Search button pressed");
-				searchMovies();
+				
+				movies = searchMovies(textField.getText());
+				eraseMoviesTable();
+				insertMoviesTable(movies);
 				
 
 			}
@@ -222,47 +225,33 @@ public class MainFrame extends DVDRental{
 		
 
 		
-		
-		
-		dvdTable = new JTable(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"Tytu\u0142", "Re\u017Cyser", "Kategoria", "Ilo\u015B\u0107"
-			}
-		) {
-			Class[] columnTypes = new Class[] {
-				String.class, String.class, String.class, Integer.class
-			};
+		dvdTable = new JTable(new DefaultTableModel(new Object[][] {},
+				new String[] { "Tytu\u0142", "Re\u017Cyser", "Kategoria", "Ilo\u015B\u0107" }) {
+			Class[] columnTypes = new Class[] { String.class, String.class, String.class, Integer.class };
+
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
-			boolean[] columnEditables = new boolean[] {
-				false, false, false, false
-			};
+
+			boolean[] columnEditables = new boolean[] { false, false, false, false };
+
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
 			}
 		});
 
-		insertMoviesTable();		
-		
+		insertMoviesTable(getAllMovies());
+	
 		scrollPane = new JScrollPane(dvdTable);
 		tablePanel.add(scrollPane, BorderLayout.CENTER);
-		
-		
-		
+
 		// content panes must be opaque
 		mainPanel.setOpaque(true);
 		frame.setContentPane(mainPanel);
 		frame.setMinimumSize(frame.getMinimumSize());
 
-		
 		// Display the window.
 		frame.pack();
 		frame.setVisible(true);
-
-		
 	}
-
 }

@@ -88,8 +88,11 @@ public class SqlHandler implements DVDRentInterface{
 			state.execute(createMoviesList);
 			state.execute(createDvdList);
 		} catch (SQLException e) {
-			 System.err.println("Blad przy tworzeniu tabeli");
-	            return false;
+			log.error("Blad przy tworzeniu tabeli");
+			log.error(e.getMessage());
+			log.error(e.getStackTrace());
+			
+			return false;
 		}
 		return true;
 	}
@@ -124,9 +127,9 @@ public class SqlHandler implements DVDRentInterface{
 			prepStmt.setString(4, userSurname);
 			prepStmt.setDate(5, lentDate);
 			prepStmt.execute();
-			log.info("dvd " + mid +  " added");
+			log.info("dvd " + mid + " added");
 		} catch (SQLException e) {
-			System.err.println("Blad przy wstawianiu plyty dvd");
+			log.error("Blad przy wstawianiu plyty dvd - mid: " + mid);
 			e.printStackTrace();
 			return false;
 		}

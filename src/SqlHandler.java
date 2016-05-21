@@ -82,7 +82,7 @@ public class SqlHandler implements DVDRentInterface{
 
 	public boolean createTables(){
 		String createMoviesList = "CREATE TABLE IF NOT EXISTS movies_list (mid INTEGER PRIMARY KEY AUTOINCREMENT, category varchar(255), director varchar(255), name varchar(255), UNIQUE (name) )"; 
-		String createDvdList = "CREATE TABLE IF NOT EXISTS dvd_list (dvd_id INTEGER PRIMARY KEY AUTOINCREMENT, mid integer, available boolean )"; 
+		String createDvdList = "CREATE TABLE IF NOT EXISTS dvd_list (dvd_id INTEGER PRIMARY KEY AUTOINCREMENT, mid integer, available boolean, user_name varchar(255) )"; 
 		try {
 			state.execute(createMoviesList);
 			state.execute(createDvdList);
@@ -97,7 +97,7 @@ public class SqlHandler implements DVDRentInterface{
 	
 	
 	
-	public boolean insertMovie(String category, String director, String name){
+	public boolean insertMovie(  String name,String director, String category){
 		 try {
 	            PreparedStatement prepStmt = conn.prepareStatement(
 	                    "insert into movies_list values (NULL, ?, ?, ?);");

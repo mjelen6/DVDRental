@@ -23,6 +23,10 @@ public abstract class DVDRental {
 		return dvdRentInterface.insertMovie(name, director, category);
 	}
 	
+	public DVDList findDvdByName(String name){
+		return dvdRentInterface.findDvdByName(name);
+	}
+	
 	
 	
 }

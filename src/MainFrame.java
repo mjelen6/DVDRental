@@ -7,6 +7,7 @@ import java.awt.Label;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import org.apache.log4j.BasicConfigurator;
@@ -20,18 +21,10 @@ import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-
 import javax.swing.Box;
 import java.awt.GridLayout;
-import java.awt.FlowLayout;
 import javax.swing.BoxLayout;
-import javax.swing.border.TitledBorder;
-import javax.swing.border.MatteBorder;
-import java.awt.Color;
 import javax.swing.border.EtchedBorder;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.CompoundBorder;
 
 public class MainFrame extends DVDRental{
 
@@ -76,6 +69,34 @@ public class MainFrame extends DVDRental{
 	}
 	
 	
+	private ActionListener addListener = new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+
+			log.trace("Adding new movie");
+			insertNewMovie();
+			eraseMoviesTable();
+			insertMoviesTable(getAllMovies());
+		}
+	};
+	
+
+	private ActionListener searchListener = new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+
+			log.debug("Search button pressed");
+			
+			movies = searchMovies(searchTextField.getText());
+			eraseMoviesTable();
+			insertMoviesTable(movies);
+		}
+	};	
+	
+	
+	
 	private void insertRowInMoviesTable(Movie movie) {
 				
 		DefaultTableModel model = (DefaultTableModel) dvdTable.getModel();
@@ -105,6 +126,37 @@ public class MainFrame extends DVDRental{
 		}
 	}
 	
+	
+	private boolean insertNewMovie() {
+		
+		String title = titleField.getText();
+		String director = directorField.getText();
+		String category = categoryField.getText();
+		
+		boolean result = false;
+		
+		log.trace("Inserting new movie: " + title + " " + " " + director + " " + category);
+		
+		if (title.isEmpty() || director.isEmpty() || category.isEmpty()) {
+			log.trace("Empty field");
+			JOptionPane.showMessageDialog(frame, "¯adne pole nie mo¿e byæ puste");
+			
+		} else {
+			
+			result = insertMovie(title, director, category);
+			
+			if(result == true){
+				log.debug("New movie inserted");	
+			}
+			else {
+				log.debug("Error during insertion or movie already exist");
+				JOptionPane.showMessageDialog(frame, "Film o ");
+			}
+			
+		}
+		
+		return result;
+	}
 	
 	
 	private MoviesList searchMovies(String nameOrDirector) {
@@ -188,19 +240,7 @@ public class MainFrame extends DVDRental{
 		searchBox.add(searchTextField);
 		searchTextField.setMaximumSize( searchTextField.getPreferredSize() );
 		searchTextField.setHorizontalAlignment(SwingConstants.LEFT);
-		searchTextField.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-				log.debug("Enter on textField");
-				
-				movies = searchMovies(searchTextField.getText());
-				eraseMoviesTable();
-				insertMoviesTable(movies);
-				
-			}
-		});
+		searchTextField.addActionListener(searchListener);
 		
 
 		
@@ -212,11 +252,7 @@ public class MainFrame extends DVDRental{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				
-				log.debug("Search button pressed");
 				
-				movies = searchMovies(searchTextField.getText());
-				eraseMoviesTable();
-				insertMoviesTable(movies);
 				
 
 			}
@@ -269,27 +305,25 @@ public class MainFrame extends DVDRental{
 		titleField.setMaximumSize(new Dimension(166, 20));
 		titleField.setHorizontalAlignment(SwingConstants.LEFT);
 		titleField.setColumns(20);
+		titleField.addActionListener(addListener);
 		
 		directorField = new JTextField();
 		fieldPanel.add(directorField);
 		directorField.setMaximumSize(new Dimension(166, 20));
 		directorField.setHorizontalAlignment(SwingConstants.LEFT);
 		directorField.setColumns(20);
+		directorField.addActionListener(addListener);
 		
 		categoryField = new JTextField();
 		fieldPanel.add(categoryField);
 		categoryField.setMaximumSize(new Dimension(166, 20));
 		categoryField.setHorizontalAlignment(SwingConstants.LEFT);
 		categoryField.setColumns(20);
+		categoryField.addActionListener(addListener);
 		
 		addButton = new JButton("Dodaj");
-		addButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		addButton.addActionListener(addListener);
 				
-				
-				
-			}
-		});
 		insertBox.add(addButton);
 		addButton.setAlignmentX(0.5f);
 		

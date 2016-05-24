@@ -69,7 +69,7 @@ public class MainFrame extends DVDRental{
 	}
 	
 	
-	private ActionListener addListener = new ActionListener() {
+	private ActionListener addMovieListener = new ActionListener() {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -150,7 +150,7 @@ public class MainFrame extends DVDRental{
 			}
 			else {
 				log.debug("Error during insertion or movie already exist");
-				JOptionPane.showMessageDialog(frame, "Film o ");
+				JOptionPane.showMessageDialog(frame, "Film o podanym tytule ju¿ istnieje");
 			}
 			
 		}
@@ -305,24 +305,24 @@ public class MainFrame extends DVDRental{
 		titleField.setMaximumSize(new Dimension(166, 20));
 		titleField.setHorizontalAlignment(SwingConstants.LEFT);
 		titleField.setColumns(20);
-		titleField.addActionListener(addListener);
+		titleField.addActionListener(addMovieListener);
 		
 		directorField = new JTextField();
 		fieldPanel.add(directorField);
 		directorField.setMaximumSize(new Dimension(166, 20));
 		directorField.setHorizontalAlignment(SwingConstants.LEFT);
 		directorField.setColumns(20);
-		directorField.addActionListener(addListener);
+		directorField.addActionListener(addMovieListener);
 		
 		categoryField = new JTextField();
 		fieldPanel.add(categoryField);
 		categoryField.setMaximumSize(new Dimension(166, 20));
 		categoryField.setHorizontalAlignment(SwingConstants.LEFT);
 		categoryField.setColumns(20);
-		categoryField.addActionListener(addListener);
+		categoryField.addActionListener(addMovieListener);
 		
 		addButton = new JButton("Dodaj");
-		addButton.addActionListener(addListener);
+		addButton.addActionListener(addMovieListener);
 				
 		insertBox.add(addButton);
 		addButton.setAlignmentX(0.5f);

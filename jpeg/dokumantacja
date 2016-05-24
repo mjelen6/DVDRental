@@ -1,0 +1,8 @@
+Wymagania dokumentacji:
+
+	1. Do czego s³u¿y program
+	2. Opis dzia³ania programu
+	3. Informacje na temat kompilacji oraz ewentualnych zewnêtrznych bibliotek niezbêdnych do zbudowania projektu
+	4. Opis struktury klas (do czego s³u¿y ka¿da klasa, jakie posiada metody i do czego one s³u¿¹ itp). Diagram UML klas
+	5. Opis plików projektu (czyli co siê znajduje w ka¿dym pliku)
+	6. Informacje dla u¿ytkownika (czyli jak uruchomiæ projekt, jakie posiada opcje itp.)

@@ -1,12 +1,20 @@
 import java.sql.Date;
 
+
+/**
+ * 
+ * @author Maciek
+ *
+ */
 public class DVD {
+	
 	int dvdId; 
 	int mid; 
 	boolean available;
 	String userName;
 	String userSurname;
 	Date lentDate;
+	
 	@Override
 	public String toString() {
 		return "DVD [dvdId=" + dvdId + ", mid=" + mid + ", available=" + available + ", userName=" + userName

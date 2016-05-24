@@ -4,17 +4,22 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="lib" path="lib/jsoup-1.8.2.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/D:/java_workspace/DVDrent/lib/doc/jsoup-1.8.2-javadoc.jar!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/DVDrent/lib/doc/jsoup-1.8.2-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/log4j-1.2.17.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/D:/java_workspace/DVDrent/lib/doc/log4j-1.2.17-javadoc.jar!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/DVDrent/lib/doc/log4j-1.2.17-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/sqlite-jdbc-3.7.2.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:file:/D:/java_workspace/DVDrent/lib/doc/sqlite-jdbc-3.7.2-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/itextpdf-5.5.9.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/DVDrent/lib/doc/itextpdf-5.5.9-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="bin"/>

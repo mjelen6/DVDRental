@@ -127,7 +127,7 @@ public class SqlHandler implements DVDRentInterface{
 			prepStmt.setString(4, userSurname);
 			prepStmt.setDate(5, lentDate);
 			prepStmt.execute();
-			log.info("dvd " + mid + " added");
+			log.info("dvd o mid: " + mid + " added");
 		} catch (SQLException e) {
 			log.error("Blad przy wstawianiu plyty dvd - mid: " + mid);
 			e.printStackTrace();
@@ -188,7 +188,7 @@ public class SqlHandler implements DVDRentInterface{
 		int countetr = 0;
 	
 		try {
-			ResultSet resul
+//			ResultSet resul
 		} catch (Exception e) {
 		}
 		return countetr;

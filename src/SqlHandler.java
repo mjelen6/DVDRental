@@ -1,5 +1,3 @@
-
-
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -7,13 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-
-import javax.naming.spi.DirStateFactory.Result;
-
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 /**
@@ -178,6 +169,7 @@ public class SqlHandler implements DVDRentInterface{
 		return movies;
 	}
 
+	@Override
 	public DVDList getAllDvds() {
 		
 		DVDList dvdList = new DVDList();
@@ -202,7 +194,8 @@ public class SqlHandler implements DVDRentInterface{
 		}
 		return dvdList;
 	}
-
+	
+	@Override
 	public int countAvaliableDvd(Movie movie) {
 
 		int countetr = 0;

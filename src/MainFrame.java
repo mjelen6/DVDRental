@@ -88,7 +88,6 @@ public class MainFrame extends DVDRental{
 		public void actionPerformed(ActionEvent e) {
 
 			log.debug("Search button pressed");
-			
 			movies = searchMovies(searchTextField.getText());
 			eraseMoviesTable();
 			insertMoviesTable(movies);
@@ -161,9 +160,8 @@ public class MainFrame extends DVDRental{
 	
 	private MoviesList searchMovies(String nameOrDirector) {
 		
-		log.trace("Searching for movies");
-
-		log.trace("Search for: " + nameOrDirector);
+		log.debug("Searching for movies");
+		log.debug("Search for: " + nameOrDirector);
 		
 		MoviesList moviesList;
 		
@@ -176,9 +174,9 @@ public class MainFrame extends DVDRental{
 			moviesList.add(findMovieByName(nameOrDirector));
 		}
 		
-		log.debug(movies.size() + " movies found");
+		log.debug(moviesList.size() + " movies found");
 		
-		return movies;
+		return moviesList;
 	}
 	
 	

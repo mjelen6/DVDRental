@@ -105,13 +105,29 @@ public class PdfCreator {
 
 	private void addContent(Document document, DVDList dvdList) throws DocumentException {
 
-
 		// add a table
 		createTable(document, dvdList);
-
-
 	}
 
+	private void addRow(PdfPTable table, DVD dvd) {
+		
+		PdfPCell cell = new PdfPCell(new Phrase(Integer.toString(dvd.getDvdId())));
+		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		table.addCell(cell);
+
+		
+		cell = new PdfPCell(new Phrase(dvd.getUserName()));
+		cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+		table.addCell(cell);
+		
+		
+		cell = new PdfPCell(new Phrase(dvd.getLentDate().toString()));
+		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		table.addCell(cell);
+	
+	}
+	
+	
 	private void createTable(Document document, DVDList dvdList) throws DocumentException {
 		
 		PdfPTable table = new PdfPTable(3);
@@ -134,15 +150,12 @@ public class PdfCreator {
 		table.addCell(c1);
 		table.setHeaderRows(1);
 
-		table.addCell("1.0");
-		table.addCell("1.1");
-		table.addCell("1.2");
-		table.addCell("2.1");
-		table.addCell("2.2");
-		table.addCell("2.3");
-
+		
+		for(DVD dvd : dvdList){
+			addRow(table, dvd);
+		}
+		
 		document.add(table);
-
 	}
 
 	// private static void createList(Section subCatPart) {

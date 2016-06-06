@@ -1,3 +1,5 @@
+import java.sql.Date;
+
 import org.apache.log4j.Logger;
 
 public abstract class DVDRental {
@@ -8,14 +10,13 @@ public abstract class DVDRental {
 	
 	public DVDRental(DVDRentInterface dvdRentInterface){
 		this.dvdRentInterface = dvdRentInterface;
-	}
-	
+	}	
 	
 	public MoviesList getAllMovies() {
 		return dvdRentInterface.getAllMovies();
 	}
 
-	public MoviesList findMovieByName(String name){
+	public Movie findMovieByName(String name){
 		return dvdRentInterface.findMovieByName(name);
 	}
 	
@@ -26,6 +27,11 @@ public abstract class DVDRental {
 	public DVDList findDvdByName(String name){
 		return dvdRentInterface.findDvdByName(name);
 	}
+	
+	public boolean insertDvd(int mid, Boolean avaliable, String userName, String userSurname, Date lentDate){
+		return dvdRentInterface.insertDvd(mid, avaliable, userName, userSurname, lentDate);
+	}
+	
 	
 	
 	

@@ -1,6 +1,5 @@
 import java.sql.Date;
 
-
 /**
  * 
  * @author Maciek
@@ -8,12 +7,12 @@ import java.sql.Date;
  */
 public class DVD {
 	
-	int dvdId; 
-	int mid; 
-	boolean available;
-	String userName;
-	String userSurname;
-	Date lentDate;
+	private int dvdId; 
+	private int mid; 
+	private boolean available;
+	private String userName;
+	private String userSurname;
+	private Date lentDate;
 	
 	@Override
 	public String toString() {

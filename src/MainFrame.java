@@ -165,14 +165,15 @@ public class MainFrame extends DVDRental{
 
 		log.trace("Search for: " + nameOrDirector);
 		
-		MoviesList movies;
+		MoviesList moviesList;
 		
 		if(nameOrDirector.isEmpty()){
-			movies = getAllMovies();		
+			moviesList = getAllMovies();		
 		}
 	
 		else {
-			movies = findMovieByName(nameOrDirector);
+			moviesList = new MoviesList();
+			moviesList.add(findMovieByName(nameOrDirector));
 		}
 		
 		log.debug(movies.size() + " movies found");

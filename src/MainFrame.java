@@ -147,7 +147,7 @@ public class MainFrame extends DVDRental{
 			
 		} else {
 			
-			result = insertMovie(title, director, category);
+			result = insertMovie(new Movie(title, director, category));
 			
 			if(result == true){
 				log.debug("New movie inserted");	
@@ -176,7 +176,7 @@ public class MainFrame extends DVDRental{
 	
 		else {
 			moviesList = new MoviesList();
-			moviesList.add(findMovieByName(nameOrDirector));
+			moviesList.add(findMovieByTitle(nameOrDirector));
 		}
 		
 		log.debug(moviesList.size() + " movies found");

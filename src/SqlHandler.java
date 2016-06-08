@@ -305,6 +305,47 @@ public class SqlHandler implements DVDRentInterface{
 		}
 		return movie;
 	}
+	
+	
+	public DVD findDvdByID(int dvdID) {
+
+		// dvd_list
+		// dvd_id INTEGER PRIMARY KEY AUTOINCREMENT,
+		// mid integer,
+		// available boolean,
+		// user_name varchar(255),
+		// lent_date date)
+
+		DVD dvd = null;
+
+		try {
+			ResultSet result = state.executeQuery("SELECT * FROM dvd_list where dvd_id = " + dvdID);
+
+			int tempDvdID;
+			int tempMid;
+			boolean tempAvailable;
+			String tempUserName;
+			Date tempDate;
+
+			while (result.next()) {
+				tempDvdID = result.getInt("dvd_id");
+				tempMid = result.getInt("mid");
+				tempAvailable = result.getBoolean("available");
+				tempUserName = result.getString("user_name");
+				tempDate = result.getDate("lent_date");
+				dvd = new DVD(tempDvdID, tempMid, tempAvailable, tempUserName, tempDate);
+				return dvd;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("blad przy wyci¹ganiu dvd");
+			return null;
+		}
+		return dvd;
+	}
+	
+	
+	@Override
 	public Movie findMovieByTitle(String title){
 		
 		Movie movie = null;

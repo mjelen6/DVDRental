@@ -1,4 +1,4 @@
-import java.sql.Date;
+
 
 /**
  * 
@@ -14,6 +14,7 @@ public interface DVDRentInterface {
 	
 	public MoviesList getAllMovies();
 	public Movie findMovieByTitle(String title);
+	public Movie findMovieByID(int mid);
 	
 
 	public boolean insertDvd(DVD dvd);

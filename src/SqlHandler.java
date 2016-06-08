@@ -291,17 +291,25 @@ public class SqlHandler implements DVDRentInterface{
 		Movie movie = null;
 
 		try {
-			ResultSet result = state.executeQuery("SELECT * FROM movies_list where mid = " + mid);
+
+			String query = "SELECT * FROM movies_list where mid = ?";
+			PreparedStatement prepStmt = conn.prepareStatement(query);
+			prepStmt.setInt(1, mid);
+			ResultSet result = prepStmt.executeQuery();
+			
+			
 			int tempMid;
 			String tempCategory;
 			String tempTitle;
 			String tempDirector;
+			
 			while (result.next()) {
+				
 				tempMid = result.getInt("mid");
-				tempCategory = result.getString("category");
 				tempTitle = result.getString("title");
 				tempDirector = result.getString("director");
-				movie = new Movie(tempMid, tempCategory, tempTitle, tempDirector);
+				tempCategory = result.getString("category");
+				movie = new Movie(tempMid, tempTitle, tempDirector, tempCategory);
 				return movie;
 			}
 		} catch (Exception e) {
@@ -352,23 +360,29 @@ public class SqlHandler implements DVDRentInterface{
 	
 	
 	@Override
-	public Movie findMovieByTitle(String title){
-		
-		Movie movie = null;
-		
-		try {
-			ResultSet result = state.executeQuery("SELECT * FROM movies_list where name=\"" + title +"\"");
+	public Movie findMovieByTitle(String title) {
 
-			while(result.next()){
+		Movie movie = null;
+
+		try {
+
+			String query = "select * from movies_list where title = ?";
+
+			PreparedStatement prepStmt = conn.prepareStatement(query);
+			prepStmt.setString(1, title);
+			ResultSet result = prepStmt.executeQuery();
+
+			while (result.next()) {
+
 				int tempMid = result.getInt("mid");
-				String tempCategory = result.getString("category");
-				String tempTitle = result.getString("name");
+				String tempTitle = result.getString("title");
 				String tempDirector = result.getString("director");
-				
-				movie = new Movie(tempMid, tempCategory, tempTitle, tempDirector);
+				String tempCategory = result.getString("category");
+
+				movie = new Movie(tempMid, tempTitle, tempDirector, tempCategory);
 				log.info("Movie found");
 				return movie;
-				
+
 			}
 		} catch (Exception e) {
 			log.error("Error during movie searching");
@@ -378,6 +392,7 @@ public class SqlHandler implements DVDRentInterface{
 		return movie;
 	}
 
+	
 	public DVDList findDvdByTitle(String title){
 		
 		DVDList dvdList = new DVDList();
@@ -490,99 +505,5 @@ public class SqlHandler implements DVDRentInterface{
 
 		log.info("DVD " + dvd.getDvdId() + " removed from dvd_list");
 		return true;
-	}
-	
-	
-	
+	}	
 }
-
-
-
-
-//public boolean insertCategory(String name){
-//
-//try {
-//       PreparedStatement prepStmt = conn.prepareStatement(
-//               "insert into categories values (NULL, ?);");
-//       prepStmt.setString(1, name);
-//       prepStmt.execute();
-//   } catch (SQLException e) {
-//   	log.error("category: " + name +  " arledy exist");
-//       return false;
-//   }
-//return true;
-//}
-//public boolean insertLoan(int dvdId, String userName, String userSurname, Date lentDate, Date returnDate) {
-//try {
-//	PreparedStatement prepStmt = conn.prepareStatement("insert into loan_list values (NULL, ?, ?, ?);");
-//	prepStmt.setInt(1, dvdId);
-//	prepStmt.setString(2, userName);
-//	prepStmt.setString(3, userSurname);
-//	prepStmt.setDate(4, lentDate);
-//	prepStmt.setDate(5, returnDate);
-//	prepStmt.execute();
-//} catch (SQLException e) {
-//	System.err.println("Blad przy wstawianiu wypozyczenia");
-//	e.printStackTrace();
-//	return false;
-//}
-//return true;
-//}
-
-//public Category findCategoryByID(int cid){
-//
-//log.debug("Finding category by ID");	
-//
-//Category category;
-//try {
-//	
-//	log.debug("SQL Query: " + "SELECT * FROM categories where cid = " + cid);
-//	ResultSet result = state.executeQuery("SELECT * FROM categories where cid = " + cid);
-//
-//	while(result.next()){
-//		
-//		
-//		int tempCid = result.getInt("cid");
-//		String tempName = result.getString("name");
-//		log.debug("Found category: " + tempCid + " " + tempName);
-//		category = new Category(tempCid, tempName);
-//		return category;
-//	}
-//} catch (Exception e) {
-//	log.error("Error in searching category by ID");
-//	e.printStackTrace();
-//}
-//
-//log.debug("Category with ID = " + cid +" not found");
-//
-//return null;
-//}
-//
-//public Loan findLoanByID(int loanId){
-//Loan loan;
-//try {
-//	ResultSet result = state.executeQuery("SELECT * FROM loan_list where mid = " + loanId );
-//	int tempLoanId;
-//	int tempDvdId;
-//	String tempUserName;
-//	String tempUserSurname;
-//	Date tempLentDate;
-//	Date tempReturnDate;
-//	while(result.next()){
-//		tempLoanId = result.getInt("loan_id");
-//		tempDvdId = result.getInt("dvd_id");
-//		tempUserName = result.getString("user_name");
-//		tempUserSurname = result.getString("user_surname");
-//		tempLentDate = result.getDate("lent_date");
-//		tempReturnDate = result.getDate("return_date");
-//		loan = new Loan(tempLoanId, tempDvdId, tempUserName, tempUserSurname, tempLentDate, tempReturnDate);
-//		return loan;
-//	}
-//} catch (Exception e) {
-//	e.printStackTrace();
-//}
-//return null;
-//}
-//
-//}
-	

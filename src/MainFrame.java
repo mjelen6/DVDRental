@@ -13,7 +13,6 @@ import javax.swing.JScrollPane;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import javax.swing.JTextField;
-import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
@@ -80,7 +79,7 @@ public class MainFrame extends DVDRental{
 		public void actionPerformed(ActionEvent e) {
 
 			log.trace("Adding new movie");
-			insertNewMovie();
+			addMovie();
 			dvdTable.eraseTable();
 			dvdTable.insertTable(getAllMovies());
 		}
@@ -95,7 +94,7 @@ public class MainFrame extends DVDRental{
 			log.debug("Search button pressed");
 			movies = searchMovies(searchTextField.getText());
 			dvdTable.eraseTable();
-			dvdTable.insertTable(getAllMovies());
+			dvdTable.insertTable(movies);
 		}
 	};	
 	
@@ -108,7 +107,7 @@ public class MainFrame extends DVDRental{
 	
 	
 	
-	private boolean insertNewMovie() {
+	private boolean addMovie() {
 		
 		String title = titleField.getText();
 		String director = directorField.getText();
@@ -145,7 +144,7 @@ public class MainFrame extends DVDRental{
 		log.debug("Searching for movies");
 		log.debug("Search for: " + nameOrDirector);
 		
-		MoviesList moviesList;
+		MoviesList moviesList = null;
 		
 		if(nameOrDirector.isEmpty()){
 			moviesList = getAllMovies();		
@@ -153,7 +152,11 @@ public class MainFrame extends DVDRental{
 	
 		else {
 			moviesList = new MoviesList();
-			moviesList.add(findMovieByTitle(nameOrDirector));
+			
+			Movie movie = findMovieByTitle(nameOrDirector);
+			
+			if(movie != null)
+				moviesList.add(movie);
 		}
 		
 		log.debug(moviesList.size() + " movies found");
@@ -228,16 +231,9 @@ public class MainFrame extends DVDRental{
 		searchButton = new JButton("Szukaj");
 		searchButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		searchBox.add(searchButton);
-		searchButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				
-				
-				
-
-			}
-		});
+		searchButton.addActionListener(searchListener);
+		
+		
 		mainPanel.add(sideBar, BorderLayout.WEST);
 		
 		verticalStrut = Box.createVerticalStrut(20);

@@ -1,5 +1,3 @@
-import java.sql.Date;
-
 import org.apache.log4j.Logger;
 
 
@@ -37,7 +35,9 @@ public abstract class DVDRental {
 	public Movie findMovieByTitle(String title) {
 		return dvdRentInterface.findMovieByTitle(title);
 	}
-
+	public Movie findMovieByID(int mid){
+		return dvdRentInterface.findMovieByID(mid);
+	}
 
 
 	

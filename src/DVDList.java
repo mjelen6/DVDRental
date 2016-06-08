@@ -1,5 +1,10 @@
 import java.util.ArrayList;
 
+/**
+ * 
+ * @author Maciek
+ *
+ */
 public class DVDList extends ArrayList<DVD> {
 
 	/*

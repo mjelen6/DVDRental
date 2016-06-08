@@ -74,7 +74,7 @@ public class SqlHandler implements DVDRentInterface{
 
 	public boolean createTables(){
 		String createMoviesList = "CREATE TABLE IF NOT EXISTS movies_list (mid INTEGER PRIMARY KEY AUTOINCREMENT, category varchar(128), director varchar(128), name varchar(128), UNIQUE (name) )"; 
-		String createDvdList = "CREATE TABLE IF NOT EXISTS dvd_list (dvd_id INTEGER PRIMARY KEY AUTOINCREMENT, mid integer, available boolean, user_name varchar(255), user_surname varchar(255), lent_date date)"; 
+		String createDvdList = "CREATE TABLE IF NOT EXISTS dvd_list (dvd_id INTEGER PRIMARY KEY AUTOINCREMENT, mid integer, available boolean, user_name varchar(255), lent_date date)"; 
 		
 		try {
 			state.execute(createMoviesList);
@@ -114,7 +114,7 @@ public class SqlHandler implements DVDRentInterface{
 	}
 
 	@Override
-	public boolean insertDvd(int mid, Boolean avaliable, String userName, String userSurname, Date lentDate) {
+	public boolean insertDvd(int mid, Boolean avaliable, String userName, Date lentDate) {
 		try {
 
 			String statement = "insert into dvd_list values (NULL, ?, ?, ?, ?, ?);";
@@ -123,8 +123,7 @@ public class SqlHandler implements DVDRentInterface{
 			prepStmt.setInt(1, mid);
 			prepStmt.setBoolean(2, avaliable);
 			prepStmt.setString(3, userName);
-			prepStmt.setString(4, userSurname);
-			prepStmt.setDate(5, lentDate);
+			prepStmt.setDate(4, lentDate);
 			prepStmt.execute();
 
 		} catch (SQLException e) {
@@ -181,10 +180,9 @@ public class SqlHandler implements DVDRentInterface{
 				int mid = result.getInt("mid");
 				Boolean available = result.getBoolean("available");
 				String userName = result.getString("user_name");
-				String userSurname = result.getString("user_surname");
 				Date lentDate = result.getDate("lent_date");
 
-				dvdList.add(new DVD(dvdId, mid, available, userName, userSurname, lentDate));
+				dvdList.add(new DVD(dvdId, mid, available, userName, lentDate));
 				log.info("wyciagnieto dvd");
 			}
 		} catch (Exception e) {
@@ -283,9 +281,8 @@ public class SqlHandler implements DVDRentInterface{
 				int mid = result.getInt("mid");
 				Boolean available = result.getBoolean("available");
 				String userName = result.getString("user_name");
-				String userSurname = result.getString("user_surname");
 				Date lentDate = result.getDate("lent_date");
-				dvdList.add(new DVD(dvdId, mid, available, userName, userSurname, lentDate));
+				dvdList.add(new DVD(dvdId, mid, available, userName, lentDate));
 				log.info("found dvd " + name + " " + dvdId );
 			}
 		} catch (Exception e) {

@@ -2,6 +2,12 @@ import java.sql.Date;
 
 import org.apache.log4j.Logger;
 
+
+/**
+ * 
+ * @author Maciek
+ *
+ */
 public abstract class DVDRental {
 
 	private static Logger log = Logger.getLogger(DVDRental.class);
@@ -28,8 +34,8 @@ public abstract class DVDRental {
 		return dvdRentInterface.findDvdByName(name);
 	}
 
-	public boolean insertDvd(int mid, Boolean avaliable, String userName, String userSurname, Date lentDate) {
-		return dvdRentInterface.insertDvd(mid, avaliable, userName, userSurname, lentDate);
+	public boolean insertDvd(int mid, Boolean avaliable, String userName, Date lentDate) {
+		return dvdRentInterface.insertDvd(mid, avaliable, userName, lentDate);
 	}
 
 	public DVDList getAllDvds() {

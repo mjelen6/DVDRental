@@ -26,6 +26,11 @@ import java.awt.GridLayout;
 import javax.swing.BoxLayout;
 import javax.swing.border.EtchedBorder;
 
+/**
+ * 
+ * @author Maciek
+ *
+ */
 public class MainFrame extends DVDRental{
 
 	private static Logger log = Logger.getLogger(MainFrame.class); // class logger

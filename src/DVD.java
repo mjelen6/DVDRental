@@ -11,13 +11,12 @@ public class DVD {
 	private int mid; 
 	private boolean available;
 	private String userName;
-	private String userSurname;
 	private Date lentDate;
 	
 	@Override
 	public String toString() {
 		return "DVD [dvdId=" + dvdId + ", mid=" + mid + ", available=" + available + ", userName=" + userName
-				+ ", userSurname=" + userSurname + ", lentDate=" + lentDate + "]";
+				+ ", lentDate=" + lentDate + "]";
 	}
 	public int getDvdId() {
 		return dvdId;
@@ -43,12 +42,6 @@ public class DVD {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	public String getUserSurname() {
-		return userSurname;
-	}
-	public void setUserSurname(String userSurname) {
-		this.userSurname = userSurname;
-	}
 	public Date getLentDate() {
 		return lentDate;
 	}
@@ -60,16 +53,14 @@ public class DVD {
 	 * @param mid
 	 * @param available
 	 * @param userName
-	 * @param userSurname
 	 * @param lentDate
 	 */
-	public DVD(int dvdId, int mid, boolean available, String userName, String userSurname, Date lentDate) {
+	public DVD(int dvdId, int mid, boolean available, String userName, Date lentDate) {
 		super();
 		this.dvdId = dvdId;
 		this.mid = mid;
 		this.available = available;
 		this.userName = userName;
-		this.userSurname = userSurname;
 		this.lentDate = lentDate;
 	}
 	/**

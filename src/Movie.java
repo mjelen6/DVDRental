@@ -6,8 +6,9 @@ public class Movie {
 
 	private int mid;
 	private String title;
-	private String category;
 	private String director;
+	private String category;
+	
 
 	public Movie() {
 	}

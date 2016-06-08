@@ -40,7 +40,7 @@ public class MainFrame extends DVDRental{
 	private JPanel sideBar;
 	private JPanel tablePanel;
 	private JLabel title;
-	private JTable dvdTable;
+	private DvdTable dvdTable;
 	private JScrollPane scrollPane;
 	private JTextField searchTextField;
 	private JButton searchButton;
@@ -81,8 +81,8 @@ public class MainFrame extends DVDRental{
 
 			log.trace("Adding new movie");
 			insertNewMovie();
-			eraseMoviesTable();
-			insertMoviesTable(getAllMovies());
+			dvdTable.eraseTable();
+			dvdTable.insertTable(getAllMovies());
 		}
 	};
 	
@@ -94,41 +94,18 @@ public class MainFrame extends DVDRental{
 
 			log.debug("Search button pressed");
 			movies = searchMovies(searchTextField.getText());
-			eraseMoviesTable();
-			insertMoviesTable(movies);
+			dvdTable.eraseTable();
+			dvdTable.insertTable(getAllMovies());
 		}
 	};	
 	
 	
 	
-	private void insertRowInMoviesTable(Movie movie) {
-				
-		DefaultTableModel model = (DefaultTableModel) dvdTable.getModel();
-		model.addRow(new Object[] { movie.getTitle(), movie.getDirector(), movie.getCategory(), 153 });
-		log.trace(movie + " inserted");	
-	}
+
 	
-	private void eraseMoviesTable() {
-		log.trace("Erasing movies table");
 
-		DefaultTableModel model = (DefaultTableModel) dvdTable.getModel();
-		model.getDataVector().removeAllElements();
-		model.fireTableDataChanged();
-		
-		log.trace("Movies table cleared");
-	}
 	
-	private void insertMoviesTable(MoviesList moviesList) {
-
-		log.trace("Inserting into moviesTable:");
-
-		if (!moviesList.isEmpty()) {
-			
-			for (Movie movie : moviesList) {
-				insertRowInMoviesTable(movie);
-			}
-		}
-	}
+	
 	
 	
 	private boolean insertNewMovie() {
@@ -371,7 +348,7 @@ public class MainFrame extends DVDRental{
 		
 
 		
-		dvdTable = new JTable(new DefaultTableModel(new Object[][] {},
+		dvdTable =  new DvdTable(new DefaultTableModel(new Object[][] {},
 				new String[] { "Tytu\u0142", "Re\u017Cyser", "Kategoria", "Ilo\u015B\u0107" }) {
 			Class[] columnTypes = new Class[] { String.class, String.class, String.class, Integer.class };
 
@@ -386,7 +363,7 @@ public class MainFrame extends DVDRental{
 			}
 		});
 
-		insertMoviesTable(getAllMovies());
+		dvdTable.insertTable(getAllMovies());
 		
 		verticalStrut_4 = Box.createVerticalStrut(20);
 		tablePanel.add(verticalStrut_4, BorderLayout.SOUTH);

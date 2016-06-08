@@ -73,7 +73,7 @@ public class SqlHandler implements DVDRentInterface{
 	}
 
 	public boolean createTables(){
-		String createMoviesList = "CREATE TABLE IF NOT EXISTS movies_list (mid INTEGER PRIMARY KEY AUTOINCREMENT, category varchar(128), director varchar(128), name varchar(128), UNIQUE (name) )"; 
+		String createMoviesList = "CREATE TABLE IF NOT EXISTS movies_list (mid INTEGER PRIMARY KEY AUTOINCREMENT, category varchar(128), director varchar(128), title varchar(128), UNIQUE (title) )"; 
 		String createDvdList = "CREATE TABLE IF NOT EXISTS dvd_list (dvd_id INTEGER PRIMARY KEY AUTOINCREMENT, mid integer, available boolean, user_name varchar(255), lent_date date)"; 
 		
 		try {
@@ -93,46 +93,110 @@ public class SqlHandler implements DVDRentInterface{
 	
 	
 	@Override
-	public boolean insertMovie(String name, String director, String category) {
+	public boolean insertMovie(Movie movie) {
 		try {
 			
 			String statement = "insert into movies_list values (NULL, ?, ?, ?);";
 
 			PreparedStatement prepStmt = conn.prepareStatement(statement);
-			prepStmt.setString(1, category);
-			prepStmt.setString(2, director);
-			prepStmt.setString(3, name);
+			prepStmt.setString(1, movie.getCategory());
+			prepStmt.setString(2, movie.getDirector());
+			prepStmt.setString(3, movie.getTitle());
 			prepStmt.execute();
 				
 		} catch (SQLException e) {
-			log.error("movie " + name + " alredy exist");
+			log.error("movie " + movie.getTitle() + " alredy exist");
 			return false;
 		}
 		
-		log.info("Movie added " + name);
+		log.info("Movie added " + movie.getTitle());
 		return true;
 	}
+	
+	@Override
+	public boolean updateMovie(Movie movie) {
+
+//		movies_list
+//		mid INTEGER PRIMARY KEY AUTOINCREMENT, 
+//		category varchar(128), 
+//		director varchar(128), 
+//		name varchar(128), 
+//		UNIQUE (name) 		
+		
+
+		try {
+		
+			String query = "update movies_list set category = ?, director = ?, title = ? where mid = ?;";	
+			
+			PreparedStatement prepStmt = conn.prepareStatement(query);
+			prepStmt.setString(1, movie.getCategory());
+			prepStmt.setString(2, movie.getDirector());
+			prepStmt.setString(3, movie.getTitle());
+			prepStmt.setInt(4, movie.getMid());
+			
+			prepStmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			log.error("Error removing movie " + movie.getMid());
+			return false;
+		}
+
+		log.info("Movie " + movie.getMid() + " removed from movies_list");
+		return true;
+	}
+	
+	
+	@Override
+	public boolean deleteMovie(Movie movie) {
+
+//		movies_list
+//		mid INTEGER PRIMARY KEY AUTOINCREMENT, 
+//		category varchar(128), 
+//		director varchar(128), 
+//		name varchar(128), 
+//		UNIQUE (name) 		
+		
+
+		try {
+		
+			String query = "delete from movies_list where mid = ?;";
+			
+			PreparedStatement prepStmt = conn.prepareStatement(query);
+			prepStmt.setInt(1, movie.getMid());
+			prepStmt.executeUpdate();			
+			
+			
+		} catch (SQLException e) {
+			log.error("Error removing movie " + movie.getMid());
+			return false;
+		}
+
+		log.info("Movie " + movie.getMid() + " removed from movies_list");
+		return true;
+	}
+	
+	
 
 	@Override
-	public boolean insertDvd(int mid, Boolean avaliable, String userName, Date lentDate) {
+	public boolean insertDvd(DVD dvd) {
 		try {
 
 			String statement = "insert into dvd_list values (NULL, ?, ?, ?, ?, ?);";
 
 			PreparedStatement prepStmt = conn.prepareStatement(statement);
-			prepStmt.setInt(1, mid);
-			prepStmt.setBoolean(2, avaliable);
-			prepStmt.setString(3, userName);
-			prepStmt.setDate(4, lentDate);
+			prepStmt.setInt(1, dvd.getMid());
+			prepStmt.setBoolean(2, dvd.isAvailable());
+			prepStmt.setString(3, dvd.getUserName());
+			prepStmt.setDate(4, dvd.getLentDate());
 			prepStmt.execute();
 
 		} catch (SQLException e) {
-			log.error("Blad przy wstawianiu plyty dvd - mid: " + mid);
+			log.error("Blad przy wstawianiu plyty dvd - mid: " + dvd.getMid());
 			e.printStackTrace();
 			return false;
 		}
 
-		log.info("DVD with mid: " + mid + " added");
+		log.info("DVD with mid: " + dvd.getMid() + " added");
 		return true;
 	}
 	
@@ -146,16 +210,16 @@ public class SqlHandler implements DVDRentInterface{
 			ResultSet result = state.executeQuery("SELECT * FROM movies_list");
 			int mid;
 			String category;
-			String name;
+			String title;
 			String director;
 
 			while (result.next()) {
 
 				mid = result.getInt("mid");
 				category = result.getString("category");
-				name = result.getString("name");
+				title = result.getString("title");
 				director = result.getString("director");
-				movies.add(new Movie(mid, category, name, director));
+				movies.add(new Movie(mid, category, title, director));
 				log.info("wyjeto film z bazy");
 			}
 
@@ -224,14 +288,14 @@ public class SqlHandler implements DVDRentInterface{
 			ResultSet result = state.executeQuery("SELECT * FROM movies_list where mid = " + mid);
 			int tempMid;
 			String tempCategory;
-			String tempName;
+			String tempTitle;
 			String tempDirector;
 			while (result.next()) {
 				tempMid = result.getInt("mid");
 				tempCategory = result.getString("category");
-				tempName = result.getString("name");
+				tempTitle = result.getString("title");
 				tempDirector = result.getString("director");
-				movie = new Movie(tempMid, tempCategory, tempName, tempDirector);
+				movie = new Movie(tempMid, tempCategory, tempTitle, tempDirector);
 				return movie;
 			}
 		} catch (Exception e) {
@@ -241,20 +305,20 @@ public class SqlHandler implements DVDRentInterface{
 		}
 		return movie;
 	}
-	public Movie findMovieByName(String name){
+	public Movie findMovieByTitle(String title){
 		
 		Movie movie = null;
 		
 		try {
-			ResultSet result = state.executeQuery("SELECT * FROM movies_list where name=\"" + name +"\"");
+			ResultSet result = state.executeQuery("SELECT * FROM movies_list where name=\"" + title +"\"");
 
 			while(result.next()){
 				int tempMid = result.getInt("mid");
 				String tempCategory = result.getString("category");
-				String tempName = result.getString("name");
+				String tempTitle = result.getString("name");
 				String tempDirector = result.getString("director");
 				
-				movie = new Movie(tempMid, tempCategory, tempName, tempDirector);
+				movie = new Movie(tempMid, tempCategory, tempTitle, tempDirector);
 				log.info("Movie found");
 				return movie;
 				
@@ -267,13 +331,13 @@ public class SqlHandler implements DVDRentInterface{
 		return movie;
 	}
 
-	public DVDList findDvdByName(String name){
+	public DVDList findDvdByTitle(String title){
 		
 		DVDList dvdList = new DVDList();
 		
 		try {
 			
-			String query = "SELECT * from dvd_list where mid = ( Select mid from movies_list where name=\"" + name + "\")";
+			String query = "SELECT * from dvd_list where mid = ( Select mid from movies_list where name=\"" + title + "\")";
 			ResultSet result = state.executeQuery(query);
 			
 			while(result.next()){
@@ -283,14 +347,106 @@ public class SqlHandler implements DVDRentInterface{
 				String userName = result.getString("user_name");
 				Date lentDate = result.getDate("lent_date");
 				dvdList.add(new DVD(dvdId, mid, available, userName, lentDate));
-				log.info("found dvd " + name + " " + dvdId );
+				log.info("found dvd " + title + " " + dvdId );
 			}
 		} catch (Exception e) {
-			log.error("blad przy szukaniu dvd by name");
+			log.error("Error during searching dvd by title");
 			e.printStackTrace();
 		}
 		return dvdList;
 	}
+	
+	
+	
+	public boolean rentDVD(DVD dvd, String user) {
+		
+//		dvd_list
+//			dvd_id INTEGER PRIMARY KEY AUTOINCREMENT,
+//			mid integer,
+//			available boolean,
+//			user_name varchar(255),
+//			lent_date date)
+
+		try {
+		
+			String query = "update dvd_list set available = false, user_name = ?, lent_date = NOW() where dvd_id = ?;";
+			
+			PreparedStatement prepStmt = conn.prepareStatement(query);
+			prepStmt.setString(1, user);
+			prepStmt.setInt(2, dvd.getDvdId());
+
+			prepStmt.executeUpdate();			
+					
+		} catch (SQLException e) {
+			log.error("Error during renting DVD " + dvd.getDvdId());
+			return false;
+		}
+
+		log.info("DVD " + dvd.getDvdId() + " rent");
+		return true;
+
+	}
+	
+	
+	
+	public boolean returnDVD(DVD dvd) {
+
+//		dvd_list
+//			dvd_id INTEGER PRIMARY KEY AUTOINCREMENT,
+//			mid integer,
+//			available boolean,
+//			user_name varchar(255),
+//			lent_date date)
+
+		try {
+		
+			String query = "update dvd_list set available = true, user_name = null, lent_date = null where dvd_id = ?;";
+			
+			PreparedStatement prepStmt = conn.prepareStatement(query);
+			prepStmt.setInt(1, dvd.getDvdId());
+			prepStmt.executeUpdate();			
+			
+			
+		} catch (SQLException e) {
+			log.error("Error during renting DVD " + dvd.getDvdId());
+			return false;
+		}
+
+		log.info("DVD " + dvd.getDvdId() + " rent");
+		return true;
+
+	}
+	
+	@Override
+	public boolean deleteDVD(DVD dvd) {
+
+//		dvd_list
+//			dvd_id INTEGER PRIMARY KEY AUTOINCREMENT,
+//			mid integer,
+//			available boolean,
+//			user_name varchar(255),
+//			lent_date date)
+
+		try {
+		
+			String query = "delete from dvd_list where dvd_id = ?;";
+			
+			PreparedStatement prepStmt = conn.prepareStatement(query);
+			prepStmt.setInt(1, dvd.getDvdId());
+			prepStmt.executeUpdate();			
+			
+			
+		} catch (SQLException e) {
+			log.error("Error removing DVD " + dvd.getDvdId());
+			return false;
+		}
+
+		log.info("DVD " + dvd.getDvdId() + " removed from dvd_list");
+		return true;
+	}
+	
+	
+	
 }
 
 

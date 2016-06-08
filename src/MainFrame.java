@@ -104,7 +104,7 @@ public class MainFrame extends DVDRental{
 	private void insertRowInMoviesTable(Movie movie) {
 				
 		DefaultTableModel model = (DefaultTableModel) dvdTable.getModel();
-		model.addRow(new Object[] { movie.getName(), movie.getDirector(), movie.getCategory(), 153 });
+		model.addRow(new Object[] { movie.getTitle(), movie.getDirector(), movie.getCategory(), 153 });
 		log.trace(movie + " inserted");	
 	}
 	

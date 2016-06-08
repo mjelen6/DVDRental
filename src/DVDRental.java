@@ -22,20 +22,20 @@ public abstract class DVDRental {
 		return dvdRentInterface.getAllMovies();
 	}
 
-	public Movie findMovieByName(String name) {
-		return dvdRentInterface.findMovieByName(name);
+	public Movie findMovieByTitle(String title) {
+		return dvdRentInterface.findMovieByTitle(title);
 	}
 
-	public boolean insertMovie(String name, String director, String category) {
-		return dvdRentInterface.insertMovie(name, director, category);
+	public boolean insertMovie(Movie movie) {
+		return dvdRentInterface.insertMovie(movie);
 	}
 
-	public DVDList findDvdByName(String name) {
-		return dvdRentInterface.findDvdByName(name);
+	public DVDList findDvdByTitle(String title) {
+		return dvdRentInterface.findDvdByTitle(title);
 	}
 
-	public boolean insertDvd(int mid, Boolean avaliable, String userName, Date lentDate) {
-		return dvdRentInterface.insertDvd(mid, avaliable, userName, lentDate);
+	public boolean insertDvd(DVD dvd) {
+		return dvdRentInterface.insertDvd(dvd);
 	}
 
 	public DVDList getAllDvds() {
@@ -46,4 +46,22 @@ public abstract class DVDRental {
 		return dvdRentInterface.countAvaliableDvd(movie);
 	}
 
+	
+	public boolean rentDVD(DVD dvd, String user){
+		return dvdRentInterface.rentDVD(dvd, user);
+	}
+
+	public boolean returnDVD(DVD dvd){
+		return dvdRentInterface.returnDVD(dvd);
+	}
+	
+	public boolean deleteMovie(Movie movie){
+		return dvdRentInterface.deleteMovie(movie);
+	}
+	
+	public boolean deleteDVD(DVD dvd){
+		return dvdRentInterface.deleteDVD(dvd);
+	}
+	
+	
 }

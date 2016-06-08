@@ -7,6 +7,41 @@ import java.sql.Date;
  */
 public class DVD {
 	
+	/**
+	 * @param dvdId
+	 * @param mid
+	 * @param available
+	 * @param userName
+	 * @param lentDate
+	 */
+	public DVD(int dvdId, int mid, boolean available, String userName, Date lentDate) {
+		super();
+		this.dvdId = dvdId;
+		this.mid = mid;
+		this.available = available;
+		this.userName = userName;
+		this.lentDate = lentDate;
+	}
+	
+	
+	public DVD(int mid, boolean available, String userName, Date lentDate) {
+		super();
+		this.mid = mid;
+		this.available = available;
+		this.userName = userName;
+		this.lentDate = lentDate;
+	}
+	
+	/**
+	 * 
+	 */
+	public DVD() {
+		super();
+	}
+	
+	
+	
+	
 	private int dvdId; 
 	private int mid; 
 	private boolean available;
@@ -15,8 +50,9 @@ public class DVD {
 	
 	@Override
 	public String toString() {
-		return "DVD [dvdId=" + dvdId + ", mid=" + mid + ", available=" + available + ", userName=" + userName
-				+ ", lentDate=" + lentDate + "]";
+		
+		return "DVD [" + dvdId + "] mid=" + mid + ", available=" + available + ", userName=" + userName
+				+ ", lentDate=" + lentDate;
 	}
 	public int getDvdId() {
 		return dvdId;
@@ -48,26 +84,6 @@ public class DVD {
 	public void setLentDate(Date lentDate) {
 		this.lentDate = lentDate;
 	}
-	/**
-	 * @param dvdId
-	 * @param mid
-	 * @param available
-	 * @param userName
-	 * @param lentDate
-	 */
-	public DVD(int dvdId, int mid, boolean available, String userName, Date lentDate) {
-		super();
-		this.dvdId = dvdId;
-		this.mid = mid;
-		this.available = available;
-		this.userName = userName;
-		this.lentDate = lentDate;
-	}
-	/**
-	 * 
-	 */
-	public DVD() {
-		super();
-	}
+
 	
 }

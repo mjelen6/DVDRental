@@ -9,16 +9,26 @@ public interface DVDRentInterface {
 
 	public MoviesList getAllMovies();
 
-	public Movie findMovieByName(String name);
+	public Movie findMovieByTitle(String title);
 
-	public boolean insertMovie(String name, String director, String category);
+	public boolean insertMovie(Movie movie);
 
-	public DVDList findDvdByName(String name);
+	public DVDList findDvdByTitle(String title);
 
-	public boolean insertDvd(int mid, Boolean avaliable, String userName, Date lentDate);
+	public boolean insertDvd(DVD dvd);
 
 	public DVDList getAllDvds();
 
 	public int countAvaliableDvd(Movie movie);
 
+	public boolean rentDVD(DVD dvd, String user);
+
+	public boolean returnDVD(DVD dvd);
+
+	public boolean deleteMovie(Movie movie);
+	
+	public boolean deleteDVD(DVD dvd);
+	
+	public boolean updateMovie(Movie movie);
+	
 }

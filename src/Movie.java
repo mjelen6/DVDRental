@@ -5,19 +5,26 @@ public class Movie {
 	private static Logger log = Logger.getLogger(Movie.class);
 
 	private int mid;
+	private String title;
 	private String category;
-	private String name;
 	private String director;
 
 	public Movie() {
 	}
 
-	public Movie(int mid, String category, String name, String director) {
+	public Movie(int mid, String title, String director, String category) {
 		this.mid = mid;
-		this.category = category;
-		this.name = name;
+		this.title = title;
 		this.director = director;
+		this.category = category;
 	}
+	
+	public Movie(String title, String director, String category) {
+		this.title = title;
+		this.director = director;
+		this.category = category;
+	}
+	
 
 	public int getMid() {
 		return mid;
@@ -35,12 +42,12 @@ public class Movie {
 		this.category = category;
 	}
 
-	public String getName() {
-		return name;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public String getDirector() {
@@ -53,7 +60,7 @@ public class Movie {
 
 	@Override
 	public String toString() {
-		return "[" + mid + "] - " + name + " " + director + " category " + category;
+		return "[" + mid + "] Title: " + title + " Director: " + director + " Category: " + category;
 	}
 
 }

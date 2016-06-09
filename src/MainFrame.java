@@ -60,7 +60,7 @@ public class MainFrame extends DVDRental{
 	private JLabel categoryLabel;
 	private Box verticalBox;
 	private Label label;
-	private JPanel panel;
+	private JPanel rentPanel;
 	private JButton button_1;
 	private Component verticalStrut;
 	private Component verticalStrut_1;
@@ -97,6 +97,16 @@ public class MainFrame extends DVDRental{
 			dvdTable.insertTable(movies);
 		}
 	};	
+	private Component horizontalStrut;
+	private JPanel panel;
+	private JLabel label_1;
+	private JLabel label_2;
+	private Component horizontalStrut_1;
+	private JPanel panel_1;
+	private JTextField textField;
+	private JTextField textField_1;
+	private Component verticalStrut_5;
+	private Component verticalStrut_6;
 	
 	
 	
@@ -270,6 +280,9 @@ public class MainFrame extends DVDRental{
 		categoryLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		labelPanel.add(categoryLabel);
 		
+		horizontalStrut = Box.createHorizontalStrut(5);
+		insertPanel.add(horizontalStrut, BorderLayout.CENTER);
+		
 		fieldPanel = new JPanel();
 		insertPanel.add(fieldPanel, BorderLayout.EAST);
 		GridLayout gl_fieldPanel = new GridLayout(3, 1);
@@ -310,15 +323,53 @@ public class MainFrame extends DVDRental{
 		verticalBox = Box.createVerticalBox();
 		sideBar.add(verticalBox);
 		
-		label = new Label("Dodaj film");
+		label = new Label("Wypo\u017Cycz");
 		label.setFont(new Font("Arial", Font.BOLD, 16));
 		verticalBox.add(label);
 		
-		panel = new JPanel();
-		verticalBox.add(panel);
-		panel.setLayout(new BorderLayout(0, 0));
+		rentPanel = new JPanel();
+		verticalBox.add(rentPanel);
+		rentPanel.setLayout(new BorderLayout(0, 0));
 		
-		button_1 = new JButton("Szukaj");
+		panel = new JPanel();
+		rentPanel.add(panel, BorderLayout.WEST);
+		GridLayout gl_panel = new GridLayout(2, 1);
+		gl_panel.setVgap(1);
+		gl_panel.setHgap(1);
+		panel.setLayout(gl_panel);
+		
+		label_1 = new JLabel("Tytu\u0142");
+		label_1.setHorizontalAlignment(SwingConstants.RIGHT);
+		panel.add(label_1);
+		
+		label_2 = new JLabel("Re\u017Cyser");
+		label_2.setHorizontalAlignment(SwingConstants.RIGHT);
+		panel.add(label_2);
+		
+		horizontalStrut_1 = Box.createHorizontalStrut(5);
+		rentPanel.add(horizontalStrut_1, BorderLayout.CENTER);
+		
+		panel_1 = new JPanel();
+		rentPanel.add(panel_1, BorderLayout.EAST);
+		GridLayout gl_panel_1 = new GridLayout(2, 1);
+		gl_panel_1.setVgap(1);
+		gl_panel_1.setHgap(1);
+		panel_1.setLayout(gl_panel_1);
+		
+		textField = new JTextField();
+		textField.setEditable(false);
+		textField.setMaximumSize(new Dimension(166, 20));
+		textField.setHorizontalAlignment(SwingConstants.LEFT);
+		textField.setColumns(20);
+		panel_1.add(textField);
+		
+		textField_1 = new JTextField();
+		textField_1.setMaximumSize(new Dimension(166, 20));
+		textField_1.setHorizontalAlignment(SwingConstants.LEFT);
+		textField_1.setColumns(20);
+		panel_1.add(textField_1);
+		
+		button_1 = new JButton("Wypo¿ycz");
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -331,6 +382,12 @@ public class MainFrame extends DVDRental{
 		
 		verticalStrut_3 = Box.createVerticalStrut(20);
 		sideBar.add(verticalStrut_3);
+		
+		verticalStrut_5 = Box.createVerticalStrut(20);
+		sideBar.add(verticalStrut_5);
+		
+		verticalStrut_6 = Box.createVerticalStrut(20);
+		sideBar.add(verticalStrut_6);
 		
 		// Create tablepanel
 		tablePanel = new JPanel(new BorderLayout());

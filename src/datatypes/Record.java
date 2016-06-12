@@ -5,11 +5,12 @@ public class Record {
 	private DVD dvd;
 	
 	public Record() {
-		// TODO Auto-generated constructor stub
+
 	}
 	
-	Record(Movie movie, DVD dvd){
-		
+	public Record(Movie movie, DVD dvd){
+		this.movie = movie;
+		this.dvd = dvd;
 	}
 
 	public Movie getMovie() {

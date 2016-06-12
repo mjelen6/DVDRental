@@ -226,7 +226,6 @@ public class MainFrame extends DVDRental{
 
 
 	/** Method that launches main frame */
-	@SuppressWarnings("serial")
 	private void createAndShowGUI() { 
 		
 		// Prepare main frame
@@ -424,24 +423,8 @@ public class MainFrame extends DVDRental{
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		title.setFont(new Font("Arial", Font.BOLD, 20));
 		tablePanel.add(title,BorderLayout.NORTH);
-		
-
-		
-		dvdTable =  new DvdTable(new DefaultTableModel(new Object[][] {},
-				new String[] { "Tytu\u0142", "Re\u017Cyser", "Kategoria", "Ilo\u015B\u0107" }) {
-			Class[] columnTypes = new Class[] { String.class, String.class, String.class, Integer.class };
-
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-
-			boolean[] columnEditables = new boolean[] { false, false, false, false };
-
-			public boolean isCellEditable(int row, int column) {
-				return columnEditables[column];
-			}
-		});
-
+				
+		dvdTable =  new DvdTable(new DvdTableItemModel(null));
 		dvdTable.insertTable(getAllMovies());
 		dvdTable.getSelectionModel().addListSelectionListener(listSelectionListener);
 				

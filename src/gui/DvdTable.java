@@ -17,12 +17,13 @@ public class DvdTable extends JTable{
 	private static final long serialVersionUID = 4476385232110473450L;
 	private static Logger log = Logger.getLogger(MainFrame.class); // class logger
 	
+	
 	public DvdTable() {
 		super();
 	}
 
-	public DvdTable(TableModel dm){
-		super(dm);
+	public DvdTable(TableModel tm){
+		super(tm);
 	}
 	
 	public void insertRow(Movie movie) {

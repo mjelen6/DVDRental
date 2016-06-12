@@ -13,8 +13,8 @@ public class Main {
 
 		// dodanie kilku filmow 
 		SqlHandler s = new SqlHandler();
-		s.insertMovie(new Movie("dupa", "komedia", "andrzej wajda"));
-		s.insertMovie(new Movie("papa", "dramat", "zdzich"));
+		s.insertMovie(new Movie("dupa", "andrzej wajda", "komedia"));
+		s.insertMovie(new Movie("papa", "zdzich", "dramat"));
 		
 		
 		System.out.println("\nlista filmow");
@@ -23,13 +23,13 @@ public class Main {
 			System.out.println(c);
 		}
 		
-		// znajdowanie filmu mo mid 
+		// znajdowanie filmu po mid 
 		Movie movies;
 		System.out.println("szukany film po id  " + 14);
 		m = s.findMovieByID(14);
 		System.out.println(m);
 
-		// szukanie filmu po mid
+		// szukanie filmu po tytule
 		System.out.println(" \nfind movie by name " + "papa");
 		movies = s.findMovieByTitle("papa");
 		System.out.println(movies);
@@ -37,9 +37,9 @@ public class Main {
 		//dodanie DVD
 		Date data = new Date(2015, 5, 21);
 		System.out.println("dodanie dvd");
-		s.insertDvd(new DVD(2, true, "Jacek Placek", data));
+		s.insertDvd(new DVD(2, false, "Jacek Placek", data));
 		
-		System.out.println("\n wyswietlenie wszystkich rekordów z tablei DVD");
+		System.out.println("\n wyswietlenie wszystkich rekordów z tableli DVD");
 		DVDList dvdList = s.getAllDvds();
 		for (DVD c : dvdList) {
 			System.out.println(c);

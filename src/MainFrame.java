@@ -24,6 +24,8 @@ import javax.swing.Box;
 import java.awt.GridLayout;
 import javax.swing.BoxLayout;
 import javax.swing.border.EtchedBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /**
  * 
@@ -58,8 +60,8 @@ public class MainFrame extends DVDRental{
 	private JLabel titleLabel;
 	private JLabel directorLabel;
 	private JLabel categoryLabel;
-	private Box verticalBox;
-	private Label label;
+	private Box rentBox;
+	private Label rentLabel;
 	private JPanel rentPanel;
 	private JButton button_1;
 	private Component verticalStrut;
@@ -67,6 +69,19 @@ public class MainFrame extends DVDRental{
 	private Component verticalStrut_2;
 	private Component verticalStrut_3;
 	private Component verticalStrut_4;
+	private Component horizontalStrut;
+	private JPanel panel;
+	private JLabel label_1;
+	private JLabel lblWypoyczajcy;
+	private Component horizontalStrut_1;
+	private JPanel panel_1;
+	private JTextField selectedDvdTitle;
+	private JTextField rentUser;
+	private Component verticalStrut_5;
+	private Component verticalStrut_6;
+	
+	
+	
 	
 	public MainFrame(DVDRentInterface dvdRentInterface) {
 		super(dvdRentInterface);
@@ -97,22 +112,22 @@ public class MainFrame extends DVDRental{
 			dvdTable.insertTable(movies);
 		}
 	};	
-	private Component horizontalStrut;
-	private JPanel panel;
-	private JLabel label_1;
-	private JLabel label_2;
-	private Component horizontalStrut_1;
-	private JPanel panel_1;
-	private JTextField textField;
-	private JTextField textField_1;
-	private Component verticalStrut_5;
-	private Component verticalStrut_6;
 	
 	
+	private ListSelectionListener listSelectionListener = new ListSelectionListener() {
+		@Override
+		public void valueChanged(ListSelectionEvent event) {
+			if (!event.getValueIsAdjusting()) {
+				if (dvdTable.getSelectedRow() > -1) {
+					// print first column value from selected row
+					String selectedDVD = dvdTable.getValueAt(dvdTable.getSelectedRow(), 0).toString();
+					System.out.println(selectedDVD);
+					selectedDvdTitle.setText(selectedDVD);
+				}
+			}
+		}
+	};
 	
-
-	
-
 	
 	
 	
@@ -125,13 +140,15 @@ public class MainFrame extends DVDRental{
 		
 		boolean result = false;
 		
-		log.trace("Inserting new movie: " + title + " " + " " + director + " " + category);
+		
 		
 		if (title.isEmpty() || director.isEmpty() || category.isEmpty()) {
 			log.trace("Empty field");
 			JOptionPane.showMessageDialog(frame, "¯adne pole nie mo¿e byæ puste");
 			
 		} else {
+			
+			log.trace("Inserting new movie: " + title + " " + " " + director + " " + category);
 			
 			result = insertMovie(new Movie(title, director, category));
 			
@@ -280,7 +297,7 @@ public class MainFrame extends DVDRental{
 		categoryLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		labelPanel.add(categoryLabel);
 		
-		horizontalStrut = Box.createHorizontalStrut(5);
+		horizontalStrut = Box.createHorizontalStrut(1);
 		insertPanel.add(horizontalStrut, BorderLayout.CENTER);
 		
 		fieldPanel = new JPanel();
@@ -320,15 +337,16 @@ public class MainFrame extends DVDRental{
 		verticalStrut_1 = Box.createVerticalStrut(20);
 		sideBar.add(verticalStrut_1);
 		
-		verticalBox = Box.createVerticalBox();
-		sideBar.add(verticalBox);
+		rentBox = Box.createVerticalBox();
+		rentBox.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		sideBar.add(rentBox);
 		
-		label = new Label("Wypo\u017Cycz");
-		label.setFont(new Font("Arial", Font.BOLD, 16));
-		verticalBox.add(label);
+		rentLabel = new Label("Wypo\u017Cycz DVD");
+		rentLabel.setFont(new Font("Arial", Font.BOLD, 16));
+		rentBox.add(rentLabel);
 		
 		rentPanel = new JPanel();
-		verticalBox.add(rentPanel);
+		rentBox.add(rentPanel);
 		rentPanel.setLayout(new BorderLayout(0, 0));
 		
 		panel = new JPanel();
@@ -342,9 +360,9 @@ public class MainFrame extends DVDRental{
 		label_1.setHorizontalAlignment(SwingConstants.RIGHT);
 		panel.add(label_1);
 		
-		label_2 = new JLabel("Re\u017Cyser");
-		label_2.setHorizontalAlignment(SwingConstants.RIGHT);
-		panel.add(label_2);
+		lblWypoyczajcy = new JLabel("Wypo\u017Cyczaj\u0105cy");
+		lblWypoyczajcy.setHorizontalAlignment(SwingConstants.RIGHT);
+		panel.add(lblWypoyczajcy);
 		
 		horizontalStrut_1 = Box.createHorizontalStrut(5);
 		rentPanel.add(horizontalStrut_1, BorderLayout.CENTER);
@@ -356,18 +374,18 @@ public class MainFrame extends DVDRental{
 		gl_panel_1.setHgap(1);
 		panel_1.setLayout(gl_panel_1);
 		
-		textField = new JTextField();
-		textField.setEditable(false);
-		textField.setMaximumSize(new Dimension(166, 20));
-		textField.setHorizontalAlignment(SwingConstants.LEFT);
-		textField.setColumns(20);
-		panel_1.add(textField);
+		selectedDvdTitle = new JTextField();
+		selectedDvdTitle.setEditable(false);
+		selectedDvdTitle.setMaximumSize(new Dimension(166, 20));
+		selectedDvdTitle.setHorizontalAlignment(SwingConstants.LEFT);
+		selectedDvdTitle.setColumns(20);
+		panel_1.add(selectedDvdTitle);
 		
-		textField_1 = new JTextField();
-		textField_1.setMaximumSize(new Dimension(166, 20));
-		textField_1.setHorizontalAlignment(SwingConstants.LEFT);
-		textField_1.setColumns(20);
-		panel_1.add(textField_1);
+		rentUser = new JTextField();
+		rentUser.setMaximumSize(new Dimension(166, 20));
+		rentUser.setHorizontalAlignment(SwingConstants.LEFT);
+		rentUser.setColumns(20);
+		panel_1.add(rentUser);
 		
 		button_1 = new JButton("Wypo¿ycz");
 		button_1.addActionListener(new ActionListener() {
@@ -375,7 +393,7 @@ public class MainFrame extends DVDRental{
 			}
 		});
 		button_1.setAlignmentX(0.5f);
-		verticalBox.add(button_1);
+		rentBox.add(button_1);
 		
 		verticalStrut_2 = Box.createVerticalStrut(20);
 		sideBar.add(verticalStrut_2);
@@ -417,6 +435,8 @@ public class MainFrame extends DVDRental{
 		});
 
 		dvdTable.insertTable(getAllMovies());
+		dvdTable.getSelectionModel().addListSelectionListener(listSelectionListener);
+				
 		
 		verticalStrut_4 = Box.createVerticalStrut(20);
 		tablePanel.add(verticalStrut_4, BorderLayout.SOUTH);

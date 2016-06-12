@@ -2,6 +2,12 @@ import java.sql.Date;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
+import datatypes.DVD;
+import datatypes.DVDList;
+import datatypes.Movie;
+import datatypes.MoviesList;
+import engine.SqlHandler;
+
 public class Main {
 
 	private static Logger log = Logger.getLogger(Main.class);

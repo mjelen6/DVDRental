@@ -1,8 +1,12 @@
+package gui;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import org.apache.log4j.Logger;
+
+import datatypes.Movie;
+import datatypes.MoviesList;
 
 public class DvdTable extends JTable{
 

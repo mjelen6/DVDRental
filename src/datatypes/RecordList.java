@@ -1,3 +1,4 @@
+package datatypes;
 import java.util.ArrayList;
 
 public class RecordList extends ArrayList<Record>{

@@ -1,3 +1,4 @@
+package engine;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -6,6 +7,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import org.apache.log4j.Logger;
+
+import datatypes.DVD;
+import datatypes.DVDList;
+import datatypes.Movie;
+import datatypes.MoviesList;
+import sqlinterface.DVDRentInterface;
 
 /**
  * Class provides saving to database

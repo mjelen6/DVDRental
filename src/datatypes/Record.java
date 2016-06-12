@@ -1,4 +1,4 @@
-
+package datatypes;
 public class Record {
 
 	private Movie movie;

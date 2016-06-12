@@ -1,4 +1,10 @@
+package sqlinterface;
 import org.apache.log4j.Logger;
+
+import datatypes.DVD;
+import datatypes.DVDList;
+import datatypes.Movie;
+import datatypes.MoviesList;
 
 
 /**

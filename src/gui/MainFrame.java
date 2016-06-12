@@ -1,3 +1,4 @@
+package gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -12,6 +13,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+
+import datatypes.Movie;
+import datatypes.MoviesList;
+import engine.SqlHandler;
+import sqlinterface.DVDRentInterface;
+import sqlinterface.DVDRental;
+
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;

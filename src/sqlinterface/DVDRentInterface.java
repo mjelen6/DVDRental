@@ -1,4 +1,8 @@
-
+package sqlinterface;
+import datatypes.DVD;
+import datatypes.DVDList;
+import datatypes.Movie;
+import datatypes.MoviesList;
 
 /**
  * 

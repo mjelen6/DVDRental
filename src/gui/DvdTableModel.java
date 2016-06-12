@@ -3,14 +3,19 @@ import javax.swing.table.AbstractTableModel;
 import datatypes.Record;
 import datatypes.RecordList;
 
-public class DvdTableItemModel extends AbstractTableModel{
+/**
+ * 
+ * @author Maciek
+ *
+ */
+public class DvdTableModel extends AbstractTableModel{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7238979096107179292L;
 
-    public DvdTableItemModel(RecordList recordList) {
+    public DvdTableModel(RecordList recordList) {
     	super();
         this.recordList = recordList;  
     }
@@ -66,6 +71,18 @@ public class DvdTableItemModel extends AbstractTableModel{
     }
     
     
+    public void addRow(Record record){
+    	recordList.add(record);
+    }
+    
+	public RecordList getRecordList() {
+		return recordList;
+	}
+
+	public void setRecordList(RecordList recordList) {
+		this.recordList = recordList;
+	}
+    
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	public Class getColumnClass(int columnIndex) {
@@ -86,5 +103,11 @@ public class DvdTableItemModel extends AbstractTableModel{
     
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
 		return (boolean) columnSpecs[columnIndex][1];
-	}  
+	}
+
+
+
+
+
+	
 }

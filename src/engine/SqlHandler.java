@@ -209,25 +209,20 @@ public class SqlHandler implements DVDRentInterface{
 	
 	
 	@Override
-	public MoviesList getAllMovies(){
-		
+	public MoviesList getAllMovies() {
+
 		MoviesList movies = new MoviesList();
-		
+
 		try {
 			ResultSet result = state.executeQuery("SELECT * FROM movies_list");
-			
-			int mid;	
-			String title;
-			String director;
-			String category;
-			
+
 			while (result.next()) {
 
-				mid = result.getInt("mid");
-				title = result.getString("title");
-				director = result.getString("director");
-				category = result.getString("category");
-				
+				int mid = result.getInt("mid");
+				String title = result.getString("title");
+				String director = result.getString("director");
+				String category = result.getString("category");
+
 				movies.add(new Movie(mid, title, director, category));
 				log.info("wyjeto film z bazy");
 			}
@@ -249,6 +244,7 @@ public class SqlHandler implements DVDRentInterface{
 		try {
 			ResultSet result = state.executeQuery("SELECT * FROM dvd_list");
 			while (result.next()) {
+				
 				int dvdId = result.getInt("dvd_id");
 				int mid = result.getInt("mid");
 				Boolean available = result.getBoolean("available");

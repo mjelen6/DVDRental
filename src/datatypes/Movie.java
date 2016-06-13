@@ -1,9 +1,8 @@
 package datatypes;
-import org.apache.log4j.Logger;
 
 public class Movie {
 
-	private static Logger log = Logger.getLogger(Movie.class);
+//	private static Logger log = Logger.getLogger(Movie.class);
 
 	private int mid;
 	private String title;

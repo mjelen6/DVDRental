@@ -1,6 +1,4 @@
 package sqlinterface;
-import org.apache.log4j.Logger;
-
 import datatypes.DVD;
 import datatypes.DVDList;
 import datatypes.Movie;
@@ -14,7 +12,7 @@ import datatypes.MoviesList;
  */
 public abstract class DVDRental {
 
-	private static Logger log = Logger.getLogger(DVDRental.class);
+//	private static Logger log = Logger.getLogger(DVDRental.class);
 	private DVDRentInterface dvdRentInterface;
 
 	

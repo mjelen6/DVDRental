@@ -28,7 +28,6 @@ import sqlinterface.DVDRental;
 
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
 import java.awt.Component;
 import java.awt.Toolkit;

@@ -17,6 +17,10 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import datatypes.DVD;
 import datatypes.DVDList;
+import datatypes.Movie;
+import datatypes.MoviesList;
+import datatypes.Record;
+import datatypes.RecordList;
 
 public class PdfCreator {
 
@@ -40,7 +44,6 @@ public class PdfCreator {
 		try {
 			baseFont = BaseFont.createFont(BaseFont.TIMES_ROMAN, BaseFont.CP1250, BaseFont.EMBEDDED);
 		} catch (DocumentException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 			
@@ -52,7 +55,7 @@ public class PdfCreator {
 
 	
 	
-	public void createRentalPdf(DVDList dvdList) {
+	public void createRentalPdf(RecordList dvdList) {
 
 		try {
 			Document document = new Document();
@@ -70,9 +73,11 @@ public class PdfCreator {
 	public static void main(String[] args) {
 
 		PdfCreator pdfCreator = new PdfCreator("kapucha", "Tabela");
-		DVDList dvdList = new DVDList();
-		dvdList.add(new DVD(1, 2, true, "janusz mistrz", new java.sql.Date(0)));
-		pdfCreator.createRentalPdf(dvdList);
+		DVD dvd = new DVD(1, 2, false, "janusz mistrz", new java.sql.Date(0));
+		Movie movie = new Movie(2, "Ogniem i mieczem", "Tutenhamon", "Horror");
+		RecordList recordList = new RecordList();
+		recordList.add(new Record(movie, dvd));
+		pdfCreator.createRentalPdf(recordList);
 
 	}
 
@@ -105,7 +110,7 @@ public class PdfCreator {
 		document.add(paragraph);
 	}
 
-	private void addContent(Document document, DVDList dvdList) throws DocumentException {
+	private void addContent(Document document, RecordList dvdList) throws DocumentException {
 
 		// add a table
 		document.add(createTable(dvdList));
@@ -114,7 +119,7 @@ public class PdfCreator {
 
 	
 	
-	private PdfPTable createTable(DVDList dvdList) throws DocumentException {
+	private PdfPTable createTable(RecordList dvdList) throws DocumentException {
 		
 		PdfPTable table = new PdfPTable(7);
 
@@ -154,7 +159,7 @@ public class PdfCreator {
 		table.setHeaderRows(1);
 
 		
-		for(DVD dvd : dvdList){
+		for(Record dvd : dvdList){
 			addRow(table, dvd);
 		}
 			
@@ -162,8 +167,20 @@ public class PdfCreator {
 	}
 
 
-	private void addRow(PdfPTable table, DVD dvd) {
-				
+	private void addRow(PdfPTable table, Record dvd) {
+		
+//	   			{"dvdID",			false},
+//				{"mid",				false},
+//				{"Tytu³",			false},
+//				{"Re¿yser",			false},
+//				{"Kategoria",		false},
+//				{"Dostêpny",		false},
+//				{"Wypo¿yczy³",		false},
+//				{"Data po¿yczki",	false},	};
+
+		
+		
+		
 		PdfPCell cell = new PdfPCell(new Phrase(Integer.toString(dvd.getDvdId())));
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table.addCell(cell);

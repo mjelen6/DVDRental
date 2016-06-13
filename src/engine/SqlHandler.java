@@ -187,8 +187,15 @@ public class SqlHandler implements DVDRentInterface{
 	@Override
 	public boolean insertDvd(DVD dvd) {
 		try {
+			
+			// dvd_list
+			// dvd_id INTEGER PRIMARY KEY AUTOINCREMENT,
+			// mid integer,
+			// available boolean,
+			// user_name varchar(255),
+			// lent_date date)
 
-			String statement = "insert into dvd_list values (NULL, ?, ?, ?, ?, ?);";
+			String statement = "insert into dvd_list values (NULL, ?, ?, ?, ?);";
 
 			PreparedStatement prepStmt = conn.prepareStatement(statement);
 			prepStmt.setInt(1, dvd.getMid());
@@ -272,7 +279,7 @@ public class SqlHandler implements DVDRentInterface{
 			
 			PreparedStatement prepStmt = conn.prepareStatement(query);
 			prepStmt.setInt(1, movie.getMid());
-			prepStmt.setBoolean(2, true);
+			prepStmt.setBoolean(1, true);
 			ResultSet result = state.executeQuery(query);
 
 			while (result.next()) {
@@ -402,7 +409,7 @@ public class SqlHandler implements DVDRentInterface{
 		
 		try {
 			
-			String query = "SELECT * from dvd_list where mid = ( Select mid from movies_list where name=\"" + title + "\")";
+			String query = "SELECT * from dvd_list where mid = ( Select mid from movies_list where title = \"" + title + "\")";
 			ResultSet result = state.executeQuery(query);
 			
 			while(result.next()){

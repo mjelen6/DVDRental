@@ -2,7 +2,7 @@ package gui;
 import javax.swing.JTable;
 import org.apache.log4j.Logger;
 
-import MainFrame;
+
 import datatypes.Record;
 import datatypes.RecordList;
 
@@ -11,12 +11,13 @@ public class DvdTable extends JTable{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 4476385232110473450L;
-	private static Logger log = Logger.getLogger(MainFrame.class); // class logger
+	private static final long serialVersionUID = 8356834987157597359L;
+	private static Logger log = Logger.getLogger(DvdTable.class); // class logger
 	
 	
 	public DvdTable(DvdTableModel dvdTableModel){
 		super(dvdTableModel);
+		getTableHeader().setReorderingAllowed(false);
 	}
 	
 	public void insertRow(Record record) {

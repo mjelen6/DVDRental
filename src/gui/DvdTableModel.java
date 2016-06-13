@@ -1,4 +1,6 @@
 package gui;
+import java.sql.Date;
+
 import javax.swing.table.AbstractTableModel;
 import datatypes.Record;
 import datatypes.RecordList;
@@ -23,15 +25,24 @@ public class DvdTableModel extends AbstractTableModel{
 	private RecordList recordList;
 
 	// Name + isCellEditable
-    private Object[][] columnSpecs = {	{"dvdID",			false},
-    									{"mid",				false},
-    									{"Tytu³",			false},
-    									{"Re¿yser",			false},
-    									{"Kategoria",		false},
-    									{"Dostêpny",		false},
-    									{"Wypo¿yczy³",		false},
-    									{"Data po¿yczki",	false},	};
+    private static final Object[][] COLUNM_SPECS = {{"dvdID",			false},
+    												{"mid",				false},
+    												{"Tytu³",			false},
+    												{"Re¿yser",			false},
+    												{"Kategoria",		false},
+    												{"Dostêpny",		false},
+    												{"Wypo¿yczy³",		false},
+    												{"Data po¿yczki",	false},	};
         
+    private static final Class<?>[] COLUMN_CLASSES = { 	Integer.class,	
+    													Integer.class,
+    													String.class,
+    													String.class,
+    													String.class,
+    													Boolean.class,
+    													String.class,
+    													Date.class};
+
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
@@ -86,11 +97,11 @@ public class DvdTableModel extends AbstractTableModel{
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	public Class getColumnClass(int columnIndex) {
-        return getValueAt(0, columnIndex).getClass();
+        return COLUMN_CLASSES[columnIndex];
     }
        
     public int getColumnCount() {
-        return columnSpecs.length;
+        return COLUNM_SPECS.length;
     }
 
     public int getRowCount() {
@@ -98,11 +109,11 @@ public class DvdTableModel extends AbstractTableModel{
     }
 
     public String getColumnName(int column) {
-        return (String)columnSpecs[column][0];
+        return (String)COLUNM_SPECS[column][0];
     }
     
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		return (boolean) columnSpecs[columnIndex][1];
+		return (boolean) COLUNM_SPECS[columnIndex][1];
 	}
 
 

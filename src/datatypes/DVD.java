@@ -9,6 +9,15 @@ import java.sql.Date;
  */
 public class DVD {
 	
+	
+	private int dvdId; 
+	private int mid; 
+	private boolean available;
+	private String userName;
+	private Date lentDate;
+	
+	
+	
 	/**
 	 * @param dvdId
 	 * @param mid
@@ -34,6 +43,15 @@ public class DVD {
 		this.lentDate = lentDate;
 	}
 	
+	public DVD(int mid) {
+		super();
+		this.mid = mid;
+		this.available = true;
+		this.userName = null;
+		this.lentDate = null;
+	}
+	
+	
 	/**
 	 * 
 	 */
@@ -44,11 +62,9 @@ public class DVD {
 	
 	
 	
-	private int dvdId; 
-	private int mid; 
-	private boolean available;
-	private String userName;
-	private Date lentDate;
+
+	
+	
 	
 	@Override
 	public String toString() {

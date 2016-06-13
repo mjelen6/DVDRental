@@ -49,6 +49,8 @@ import javax.swing.event.ListSelectionListener;
 public class MainFrame extends DVDRental{
 
 	private static Logger log = Logger.getLogger(MainFrame.class); // class logger
+	private RecordList recordList;
+	private Record selectedRecord;
 	
 	private JFrame frame;
 	private JPanel mainPanel;
@@ -85,10 +87,10 @@ public class MainFrame extends DVDRental{
 	private Component horizontalStrut;
 	private JPanel panel;
 	private JLabel label_1;
-	private JLabel lblWypoyczajcy;
+	private JLabel lblWypozyczajcy;
 	private Component horizontalStrut_1;
 	private JPanel panel_1;
-	private JTextField selectedDvdTitle;
+	private JTextField selectedDvdTitleField;
 	private JTextField rentUser;
 	private Component verticalStrut_5;
 	private Component verticalStrut_6;
@@ -98,18 +100,21 @@ public class MainFrame extends DVDRental{
 	
 	public MainFrame(DVDRentInterface dvdRentInterface) {
 		super(dvdRentInterface);
+		recordList = getAllRecords();
 	}
 	
 	
-	private ActionListener addMovieListener = new ActionListener() {
+	private ActionListener addDvdListener = new ActionListener() {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
-			log.trace("Adding new movie");
-			addMovie();
+			log.trace("Adding new DVD");
+			addDvd();
 			dvdTable.eraseTable();
-			dvdTable.insertTable(getAllMovies());
+			
+			recordList = getAllRecords();
+			dvdTable.insertTable(recordList);
 		}
 	};
 	
@@ -120,22 +125,37 @@ public class MainFrame extends DVDRental{
 		public void actionPerformed(ActionEvent e) {
 
 			log.debug("Search button pressed");
-			movies = searchMovies(searchTextField.getText());
+			
+			String searchPhrase = searchTextField.getText();
+			
+
+			if (searchPhrase.isEmpty()) 
+				recordList = getAllRecords();
+			else{
+				recordList = searchMovies(searchPhrase);
+			}
+			
 			dvdTable.eraseTable();
-			dvdTable.insertTable(movies);
+			dvdTable.insertTable(recordList);
 		}
 	};	
 	
 	
-	private ListSelectionListener listSelectionListener = new ListSelectionListener() {
+	private ListSelectionListener dvdSelectionListener = new ListSelectionListener() {
 		@Override
 		public void valueChanged(ListSelectionEvent event) {
 			if (!event.getValueIsAdjusting()) {
 				if (dvdTable.getSelectedRow() > -1) {
 					// print first column value from selected row
-					String selectedDVD = dvdTable.getValueAt(dvdTable.getSelectedRow(), 0).toString();
-					System.out.println(selectedDVD);
-					selectedDvdTitle.setText(selectedDVD);
+					
+					selectedRecord = recordList.get(dvdTable.getSelectedRow());
+					
+					int selectedDvdId = selectedRecord.getDvd().getDvdId();
+					String selectedDvdTitle = selectedRecord.getMovie().getTitle();
+					
+					
+					selectedDvdTitleField.setText(selectedDvdTitle);
+					log.debug(selectedDvdId + " " + selectedDvdTitle + " selected");					
 				}
 			}
 		}
@@ -145,7 +165,7 @@ public class MainFrame extends DVDRental{
 	
 	
 	
-	private boolean addMovie() {
+	private boolean addDvd() {
 
 		String title = titleField.getText();
 		String director = directorField.getText();
@@ -154,9 +174,11 @@ public class MainFrame extends DVDRental{
 		boolean result = false;
 
 		if (title.isEmpty() || director.isEmpty() || category.isEmpty()) {
+			
 			log.trace("Empty field");
-			JOptionPane.showMessageDialog(frame, "¯adne pole nie mo¿e byæ puste");
-		} else {
+			JOptionPane.showMessageDialog(frame, "¯adne pole nie mo¿e byæ puste");	
+		} 
+		else {
 
 			log.trace("Inserting new movie: " + title + " " + " " + director + " " + category);
 			result = insertMovie(new Movie(title, director, category));
@@ -164,33 +186,43 @@ public class MainFrame extends DVDRental{
 			if (result == true) {
 				log.debug("New movie inserted");
 			} else {
-				log.debug("Error during insertion or movie already exist");
-				JOptionPane.showMessageDialog(frame, "Film o podanym tytule ju¿ istnieje");
+				log.error("Error during movie insertion or movie already exist");
+				//JOptionPane.showMessageDialog(frame, "Film o podanym tytule ju¿ istnieje");
 			}
+			
+			log.trace("Getting movie ID");
+			Movie movie = findMovieByTitle(title);
+			
+			result = insertDvd(new DVD(movie.getMid()));
+			if(result == false)
+				log.error("Error during dvd insertion");
+			
 		}
 		return result;
 	}
 	
 	
-	private MoviesList searchMovies(String nameOrDirector) {
+	private RecordList searchMovies(String titleOrDirector) {
 
 		log.debug("Searching for movies");
-		log.debug("Search for: " + nameOrDirector);
+		log.debug("Search for: " + titleOrDirector);
 
-		MoviesList moviesList = null;
+		RecordList recordList = new RecordList();
+		Movie movie = findMovieByTitle(titleOrDirector);
 
-		if (nameOrDirector.isEmpty()) {
-			moviesList = getAllMovies();
-		} else {
-			moviesList = new MoviesList();
-			Movie movie = findMovieByTitle(nameOrDirector);
+		if (movie != null) {
+			DVDList dvdList = findDvdByTitle(movie.getTitle());
 
-			if (movie != null)
-				moviesList.add(movie);
+			if (dvdList.size() != 0) {
+				for (DVD dvd : dvdList) {
+					recordList.add(new Record(movie, dvd));
+				}
+			}
+
 		}
 
-		log.debug(moviesList.size() + " movies found");
-		return moviesList;
+		log.debug(recordList.size() + " movies found");
+		return recordList;
 	}
 	
 	
@@ -289,7 +321,7 @@ public class MainFrame extends DVDRental{
 		insertBox.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		sideBar.add(insertBox);
 
-		insertLabel = new Label("Dodaj film");
+		insertLabel = new Label("Dodaj DVD");
 		insertBox.add(insertLabel);
 		insertLabel.setFont(new Font("Arial", Font.BOLD, 16));
 
@@ -331,24 +363,24 @@ public class MainFrame extends DVDRental{
 		titleField.setMaximumSize(new Dimension(166, 20));
 		titleField.setHorizontalAlignment(SwingConstants.LEFT);
 		titleField.setColumns(20);
-		titleField.addActionListener(addMovieListener);
+		titleField.addActionListener(addDvdListener);
 
 		directorField = new JTextField();
 		fieldPanel.add(directorField);
 		directorField.setMaximumSize(new Dimension(166, 20));
 		directorField.setHorizontalAlignment(SwingConstants.LEFT);
 		directorField.setColumns(20);
-		directorField.addActionListener(addMovieListener);
+		directorField.addActionListener(addDvdListener);
 
 		categoryField = new JTextField();
 		fieldPanel.add(categoryField);
 		categoryField.setMaximumSize(new Dimension(166, 20));
 		categoryField.setHorizontalAlignment(SwingConstants.LEFT);
 		categoryField.setColumns(20);
-		categoryField.addActionListener(addMovieListener);
+		categoryField.addActionListener(addDvdListener);
 
 		addButton = new JButton("Dodaj");
-		addButton.addActionListener(addMovieListener);
+		addButton.addActionListener(addDvdListener);
 
 		insertBox.add(addButton);
 		addButton.setAlignmentX(0.5f);
@@ -379,9 +411,9 @@ public class MainFrame extends DVDRental{
 		label_1.setHorizontalAlignment(SwingConstants.RIGHT);
 		panel.add(label_1);
 
-		lblWypoyczajcy = new JLabel("Wypo\u017Cyczaj\u0105cy");
-		lblWypoyczajcy.setHorizontalAlignment(SwingConstants.RIGHT);
-		panel.add(lblWypoyczajcy);
+		lblWypozyczajcy = new JLabel("Wypo\u017Cyczaj\u0105cy");
+		lblWypozyczajcy.setHorizontalAlignment(SwingConstants.RIGHT);
+		panel.add(lblWypozyczajcy);
 
 		horizontalStrut_1 = Box.createHorizontalStrut(5);
 		rentPanel.add(horizontalStrut_1, BorderLayout.CENTER);
@@ -393,12 +425,12 @@ public class MainFrame extends DVDRental{
 		gl_panel_1.setHgap(1);
 		panel_1.setLayout(gl_panel_1);
 
-		selectedDvdTitle = new JTextField();
-		selectedDvdTitle.setEditable(false);
-		selectedDvdTitle.setMaximumSize(new Dimension(166, 20));
-		selectedDvdTitle.setHorizontalAlignment(SwingConstants.LEFT);
-		selectedDvdTitle.setColumns(20);
-		panel_1.add(selectedDvdTitle);
+		selectedDvdTitleField = new JTextField();
+		selectedDvdTitleField.setEditable(false);
+		selectedDvdTitleField.setMaximumSize(new Dimension(166, 20));
+		selectedDvdTitleField.setHorizontalAlignment(SwingConstants.LEFT);
+		selectedDvdTitleField.setColumns(20);
+		panel_1.add(selectedDvdTitleField);
 
 		rentUser = new JTextField();
 		rentUser.setMaximumSize(new Dimension(166, 20));
@@ -436,9 +468,10 @@ public class MainFrame extends DVDRental{
 		title.setFont(new Font("Arial", Font.BOLD, 20));
 		tablePanel.add(title, BorderLayout.NORTH);
 
-		dvdTable = new DvdTable(new DvdTableModel(null));
-		dvdTable.insertTable(getAllRecords());
-		dvdTable.getSelectionModel().addListSelectionListener(listSelectionListener);
+		
+		
+		dvdTable = new DvdTable(new DvdTableModel(recordList));
+		dvdTable.getSelectionModel().addListSelectionListener(dvdSelectionListener);
 
 		verticalStrut_4 = Box.createVerticalStrut(20);
 		tablePanel.add(verticalStrut_4, BorderLayout.SOUTH);

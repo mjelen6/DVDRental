@@ -28,6 +28,8 @@ import sqlinterface.DVDRental;
 
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JButton;
 import java.awt.Component;
 import java.awt.Toolkit;
@@ -254,6 +256,15 @@ public class MainFrame extends DVDRental{
 	 */
 	public static void main(String[] args) {
 
+	
+		try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e1) {
+			e1.printStackTrace();
+		}
+
+		
 		BasicConfigurator.configure();
 		log.debug("Application Start");
 

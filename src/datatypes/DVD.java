@@ -96,7 +96,7 @@ public class DVD {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	public Date getLentDate() {
+	public java.sql.Date getLentDate() {
 		return lentDate;
 	}
 	public void setLentDate(Date lentDate) {

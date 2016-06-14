@@ -20,6 +20,7 @@ import datatypes.Movie;
 import datatypes.MoviesList;
 import datatypes.Record;
 import datatypes.RecordList;
+import engine.PdfCreator;
 import engine.SqlHandler;
 import gui.DvdTable;
 import gui.DvdTableModel;
@@ -31,16 +32,22 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+
 import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.sql.Date;
+
 import javax.swing.Box;
 import java.awt.GridLayout;
 import javax.swing.BoxLayout;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * 
@@ -83,7 +90,6 @@ public class MainFrame extends DVDRental{
 	private Component verticalStrut;
 	private Component verticalStrut_1;
 	private Component verticalStrut_2;
-	private Component verticalStrut_3;
 	private Component verticalStrut_4;
 	private Component horizontalStrut;
 	private JPanel panel;
@@ -161,6 +167,7 @@ public class MainFrame extends DVDRental{
 			}
 		}
 	};
+	private JButton button;
 	
 	
 	
@@ -458,9 +465,31 @@ public class MainFrame extends DVDRental{
 
 		verticalStrut_2 = Box.createVerticalStrut(20);
 		sideBar.add(verticalStrut_2);
+		
+		button = new JButton("Zapisz");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				
+				JFileChooser jFileChooser = new JFileChooser(System.getProperty("user.dir"));
+				jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				jFileChooser.setFileFilter(new FileNameExtensionFilter("PDF files (*.pdf)", "pdf"));
+				
+				if (jFileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
 
-		verticalStrut_3 = Box.createVerticalStrut(20);
-		sideBar.add(verticalStrut_3);
+					File file = jFileChooser.getSelectedFile();
+					String fname = file.getAbsolutePath();
+					 
+					if(!fname.endsWith(".pdf") ) 
+		                file = new File(fname + ".pdf");
+							
+					PdfCreator pdfCreator = new PdfCreator(file.getName(), "Tabela");
+					pdfCreator.createRentalPdf(recordList);
+				}	
+			}
+		});
+		button.setAlignmentX(0.5f);
+		sideBar.add(button);
 
 		verticalStrut_5 = Box.createVerticalStrut(20);
 		sideBar.add(verticalStrut_5);

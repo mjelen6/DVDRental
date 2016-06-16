@@ -376,7 +376,7 @@ public class SqlHandler implements DVDRentInterface{
 
 		try {
 
-			String query = "select * from movies_list where title = ?";
+			String query = "select * from movies_list where UPPER(title) = UPPER(?)";
 
 			PreparedStatement prepStmt = conn.prepareStatement(query);
 			prepStmt.setString(1, title);
@@ -409,8 +409,13 @@ public class SqlHandler implements DVDRentInterface{
 		
 		try {
 			
-			String query = "SELECT * from dvd_list where mid = ( Select mid from movies_list where title = \"" + title + "\")";
-			ResultSet result = state.executeQuery(query);
+			String query = "SELECT * from dvd_list where mid = ( Select mid from movies_list where UPPER(title) = UPPER(?))";
+			PreparedStatement prepStmt = conn.prepareStatement(query);
+			prepStmt.setString(1, title);
+			ResultSet result = prepStmt.executeQuery();
+			
+			
+
 			
 			while(result.next()){
 				int dvdId = result.getInt("dvd_id");
@@ -441,15 +446,21 @@ public class SqlHandler implements DVDRentInterface{
 
 		try {
 		
-			String query = "update dvd_list set available = false, user_name = ?, lent_date = NOW() where dvd_id = ?;";
+			String query = "update dvd_list set available = 0, user_name = ?, lent_date = 'now' where dvd_id = ?";
 			
 			PreparedStatement prepStmt = conn.prepareStatement(query);
 			prepStmt.setString(1, user);
 			prepStmt.setInt(2, dvd.getDvdId());
-
-			prepStmt.executeUpdate();			
+			prepStmt.executeUpdate();
+			
+			
+			dvd = findDvdByID(dvd.getDvdId());
+			
+			
 					
 		} catch (SQLException e) {
+			e.printStackTrace();
+			e.getErrorCode();
 			log.error("Error during renting DVD " + dvd.getDvdId());
 			return false;
 		}
@@ -472,19 +483,21 @@ public class SqlHandler implements DVDRentInterface{
 
 		try {
 		
-			String query = "update dvd_list set available = true, user_name = null, lent_date = null where dvd_id = ?;";
+			String query = "update dvd_list set available = 1, user_name = null, lent_date = null where dvd_id = ?";
 			
 			PreparedStatement prepStmt = conn.prepareStatement(query);
 			prepStmt.setInt(1, dvd.getDvdId());
 			prepStmt.executeUpdate();			
 			
+			dvd = findDvdByID(dvd.getDvdId());
+			
 			
 		} catch (SQLException e) {
-			log.error("Error during renting DVD " + dvd.getDvdId());
+			log.error("Error during returning DVD " + dvd.getDvdId());
 			return false;
 		}
 
-		log.info("DVD " + dvd.getDvdId() + " rent");
+		log.info("DVD " + dvd.getDvdId() + " returned");
 		return true;
 
 	}

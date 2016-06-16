@@ -3,8 +3,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Date;
-import java.text.ParsePosition;
-
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -38,7 +36,9 @@ public class PdfCreator {
 	private BaseFont timesFont;
 	private BaseFont arialFont;
 	private Font catFont;
+	@SuppressWarnings("unused")
 	private Font redFont;
+	@SuppressWarnings("unused")
 	private Font subFont;
 	private Font smallBold;
 	private Font tableFont;
@@ -88,7 +88,6 @@ public class PdfCreator {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 				| UnsupportedLookAndFeelException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -130,6 +129,7 @@ public class PdfCreator {
 		// document.addCreator(System.getProperty("user.name"));
 	}
 
+	@SuppressWarnings("deprecation")
 	private void addDocHeader(Document document) throws DocumentException {
 
 		Paragraph paragraph = new Paragraph();
@@ -220,6 +220,7 @@ public class PdfCreator {
 	}
 
 
+	@SuppressWarnings("deprecation")
 	private void addRow(PdfPTable table, Record record) {
 		
 //	   			{"dvdID",			false},

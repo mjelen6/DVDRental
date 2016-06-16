@@ -39,8 +39,6 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.sql.Date;
-
 import javax.swing.Box;
 import java.awt.GridLayout;
 import javax.swing.BoxLayout;
@@ -48,6 +46,8 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  * 
@@ -182,9 +182,15 @@ public class MainFrame extends DVDRental{
 			
 			if(user.length() != 0){
 				
-				rentDVD(dvd, user);
+				rentDVD(dvd, user);	
+				
+				dvd = findDvdByID(dvd.getDvdId());
+				selectedRecord.setDvd(dvd);
+				
+				
 				((DvdTableModel)dvdTable.getModel()).fireTableDataChanged();
 				
+				rentUser.setEditable(false);
 				rentButton.setEnabled(false);
 				returnButton.setEnabled(false);
 				
@@ -202,11 +208,19 @@ public class MainFrame extends DVDRental{
 
 			log.debug("Return button pressed");
 
-			returnDVD(selectedRecord.getDvd());
+			DVD dvd = selectedRecord.getDvd();
+			returnDVD(dvd);
+		
+			dvd = findDvdByID(dvd.getDvdId());
+			selectedRecord.setDvd(dvd);
+			
+			
+			
 			((DvdTableModel) dvdTable.getModel()).fireTableDataChanged();
 
-			log.debug("Return button pressed");
-
+			
+			rentUser.setEditable(true);
+			rentUser.setText("");
 			returnButton.setEnabled(false);
 			rentButton.setEnabled(true);
 
@@ -413,7 +427,7 @@ public class MainFrame extends DVDRental{
 
 	
 		try {
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 				| UnsupportedLookAndFeelException e1) {
 			e1.printStackTrace();
@@ -473,7 +487,7 @@ public class MainFrame extends DVDRental{
 		searchTextField.addActionListener(searchListener);
 
 		searchButton = new JButton("Szukaj");
-		searchButton.setToolTipText("Wyszukaj baz\u0119 danych");
+		searchButton.setToolTipText("");
 		searchButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		searchBox.add(searchButton);
 		searchButton.addActionListener(searchListener);
@@ -549,7 +563,7 @@ public class MainFrame extends DVDRental{
 		categoryField.addActionListener(addDvdListener);
 
 		addButton = new JButton("Dodaj");
-		addButton.setToolTipText("Dodaje nowe DVD o podanych warto\u015Bciach");
+		addButton.setToolTipText("");
 		addButton.addActionListener(addDvdListener);
 
 		insertBox.add(addButton);
@@ -614,7 +628,7 @@ public class MainFrame extends DVDRental{
 		
 		remButton = new JButton("Usu\u0144 DVD");
 		remButton.setEnabled(false);
-		remButton.setToolTipText("Usuwa wybrane przez u\u017Cytkownika DVD");
+		remButton.setToolTipText("");
 		remButton.addActionListener(removeListener);
 		remButton.setAlignmentX(0.5f);
 		verticalBox.add(remButton);
@@ -695,7 +709,7 @@ public class MainFrame extends DVDRental{
 		sideBar.add(verticalStrut_2);
 		
 		btnZapiszDoPdf = new JButton("Zapisz do PDF");
-		btnZapiszDoPdf.setToolTipText("Zapisuje zawarto\u015B\u0107 aktualnej tabeli do pliku PDF. Je\u015Bli chcesz zapisa\u0107 ca\u0142\u0105 baz\u0119 danych od\u015Bwie\u017C tabel\u0119 przez naci\u015Bni\u0119cie przycisku szukaj przy pustym polu tekstowym.");
+		btnZapiszDoPdf.setToolTipText("");
 		btnZapiszDoPdf.addActionListener(savePDFListener);
 		btnZapiszDoPdf.setAlignmentX(0.5f);
 		sideBar.add(btnZapiszDoPdf);
@@ -718,6 +732,20 @@ public class MainFrame extends DVDRental{
 		dvdTable = new DvdTable(new DvdTableModel(recordList));
 		dvdTable.getSelectionModel().addListSelectionListener(recordSelectionListener);
 
+		
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(dvdTable.getModel());
+		dvdTable.setRowSorter(sorter);
+
+
+//		List<RowSorter.SortKey> sortKeys = new ArrayList<>(25);
+//		sortKeys.add(new RowSorter.SortKey(4, SortOrder.ASCENDING));
+//		sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
+//		sorter.setSortKeys(sortKeys);
+		
+		
+		
+		
+		
 		verticalStrut_4 = Box.createVerticalStrut(15);
 		tablePanel.add(verticalStrut_4, BorderLayout.SOUTH);
 

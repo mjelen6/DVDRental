@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Calendar;
+
 import org.apache.log4j.Logger;
 
 import datatypes.DVD;
@@ -446,17 +448,15 @@ public class SqlHandler implements DVDRentInterface{
 
 		try {
 		
-			String query = "update dvd_list set available = 0, user_name = ?, lent_date = 'now' where dvd_id = ?";
+			String query = "update dvd_list set available = 0, user_name = ?, lent_date = ? where dvd_id = ?";
 			
 			PreparedStatement prepStmt = conn.prepareStatement(query);
 			prepStmt.setString(1, user);
-			prepStmt.setInt(2, dvd.getDvdId());
+			
+			java.sql.Date ourJavaDateObject = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+			prepStmt.setDate(2, ourJavaDateObject);
+			prepStmt.setInt(3, dvd.getDvdId());
 			prepStmt.executeUpdate();
-			
-			
-			dvd = findDvdByID(dvd.getDvdId());
-			
-			
 					
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -489,7 +489,7 @@ public class SqlHandler implements DVDRentInterface{
 			prepStmt.setInt(1, dvd.getDvdId());
 			prepStmt.executeUpdate();			
 			
-			dvd = findDvdByID(dvd.getDvdId());
+
 			
 			
 		} catch (SQLException e) {

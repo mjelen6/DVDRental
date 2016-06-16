@@ -13,6 +13,7 @@ public class Main {
 
 	private static Logger log = Logger.getLogger(Main.class);
 
+	@SuppressWarnings("deprecation")
 	public static void main(String[] args) {
 		BasicConfigurator.configure();
 		log.debug("Application start");
